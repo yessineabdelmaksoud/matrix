@@ -1,44 +1,85 @@
-/* home.css */
-
+/* Couleur de fond pour la page */
 body {
-    background-color: #ffebc139; /* Orange très clair */
-  }
-  
+  background-color: #ffebc139; /* Orange très clair */
+}
+
+/* Style de l'image principale dans la section Home */
+.home-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 500px; /* Limite la hauteur maximale */
+}
+
+@media (min-width: 768px) {
   .home-image {
-    max-width: 100%; /* S'assure que l'image ne déborde pas */
-    height: auto; /* Maintient les proportions de l'image */
-    max-height: 500px; /* Ajustez cette valeur selon vos besoins */
+    width: 80%; /* L'image occupe 80% de la largeur sur les écrans moyens et plus */
+    margin-left: auto; /* Centre l'image horizontalement dans sa colonne */
   }
-  
-  @media (min-width: 768px) {
-    .home-image {
-      width: 80%; /* L'image occupera 80% de la largeur sur les écrans moyens et plus */
-      margin-left: auto; /* Centre l'image dans sa colonne */
-      margin-right: 0;
-    }
-  }
-  
-  .text-md-start {
-    text-align: left; 
-  }
-  
+}
 
-  .text-center {
-    text-align: center; 
-  }
-  
-  .btn-orange {
-    background-color: #ff7b00; 
-    border-color: #ff7b00;
-    padding: 20px;
-    text-align: center;
-    border: 2px solid #ff7b00; 
-    border-radius: 25px;
-    width: 110px;
-    font-size: 1.5rem; 
+/* Styles de texte pour aligner le contenu */
+.text-md-start {
+  text-align: left;
+}
 
-  }
-  
-  .btn-orange:hover {
-    background-color: #e66a00;
-  }
+.text-center {
+  text-align: center;
+}
+
+/* Style du bouton "Start" */
+.btn-orange {
+  background-color: #ff7b00;
+  border-color: #ff7b00;
+  padding: 20px;
+  border-radius: 25px;
+  width: 110px;
+  font-size: 1.5rem;
+  border: 2px solid #ff7b00;
+}
+
+.btn-orange:hover {
+  background-color: #e66a00;
+}
+
+/* Container principal pour les sections de la page */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 20px;
+}
+
+/* Styles des sections pour aligner le texte et les images */
+.section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.section .description {
+  flex: 1;
+}
+
+.section .image {
+  flex: 1;
+}
+
+.section img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Alternance de disposition pour les sections impaires */
+.section.alternate {
+  flex-direction: row-reverse;
+}
+
+/* Styles de texte centrés */
+.text-center .lead,
+.text-center h1,
+.text-center h5,
+.text-center h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
