@@ -3,20 +3,29 @@ import React from 'react';
 import CustomNavbar from './navbar';
 import Home from './home';
 import Footer from './Footer';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Seidel from './pages/seidel'; 
 
 function App() {
+  const location = useLocation();
+
+  const showFooter = location.pathname === '/';
+
   return (
-    <Router>
+    <>
       <CustomNavbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/gauss-seidel" element={<Seidel  />} />
+        <Route path="/gauss-seidel" element={<Seidel />} />
       </Routes>
-      <Footer />
-    </Router>
+      {showFooter && <Footer />}
+    </>
   );
 }
+const AppWrapper = () => (
+  <Router>
+    <App />
+  </Router>
+);
 
-export default App;
+export default AppWrapper;

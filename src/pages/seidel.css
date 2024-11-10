@@ -1,0 +1,45 @@
+.seidel-container {
+    background-color: #f2990b; /* Orange très clair pour le fond de la page */
+    padding: 20px 0; /* Espace autour du conteneur principal */
+  }
+  
+  .seidel-card {
+    border-color: #FFD580; /* Orange clair pour les bordures des cartes */
+    border-width: 2px;
+  }
+  
+  .seidel-card h5, .seidel-card h2 {
+    color: #FF8C00; /* Orange pour les titres */
+  }
+  
+  .radio-group, .matrix-type-select, .matrix-size-select, .algorithm-select {
+    border-color: #FFD580; /* Bordures en orange clair pour les sélecteurs */
+  }
+  
+  .select-input, .number-input {
+    border-color: #FFD580; /* Bordure pour tous les champs de saisie */
+  }
+  .aa{
+    background-color: #fff5e139;
+  }
+  /* src/pages/seidole.css */
+
+.btn-show-matrix {
+  background-color: #FFD580; /* Orange clair */
+  color: #FFFFFF;
+  border: none;
+}
+
+.btn-show-matrix:hover {
+  background-color: #FFA040; /* Orange un peu plus foncé pour le survol */
+}
+
+.btn-calculate {
+  background-color: #FFD580; /* Orange clair */
+  color: #FFFFFF;
+  border: none;
+}
+
+.btn-calculate:hover {
+  background-color: #FFA040; /* Orange un peu plus foncé pour le survol */
+}
