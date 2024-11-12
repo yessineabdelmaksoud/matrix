@@ -41,5 +41,34 @@
 }
 
 .btn-calculate:hover {
-  background-color: #FFA040; /* Orange un peu plus foncé pour le survol */
+  background-color: #FFA040;
 }
+
+.small-input {
+  width: 74.5px;
+  font-size: 0.9rem;
+}
+
+.moyenne-input {
+  width: 95px;
+  font-size: 0.9rem;
+}
+
+.normal-input {
+  width: 150px;
+  font-size: 1rem;
+}
+
+
+.matrix-table {
+  margin: 0 auto;
+  border-spacing: 5px;
+}
+.matrix-table td {
+  padding: 6px;
+  text-align: center;
+}
+
+
+
+

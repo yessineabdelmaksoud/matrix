@@ -2,16 +2,17 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
 import './seidel.css';
-import { TbBackground } from 'react-icons/tb';
 
 function Seidel() {
   const [method, setMethod] = useState('manual');
   const [algorithm, setAlgorithm] = useState('gauss-seidel');
-  const [matrix, setMatrix] = useState([]);
+  const [matrix, setMatrix] = useState(Array(3).fill().map(() => Array(3).fill(0)));
+  const [vectorB, setVectorB] = useState(Array(3).fill(0));
   const [size, setSize] = useState(3);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(10);
   const [matrixType, setMatrixType] = useState('triangular-lower');
+  const [matrixDisplay, setMatrixDisplay] = useState(null);
 
   const handleMethodChange = (event) => {
     setMethod(event.target.value);
@@ -21,8 +22,17 @@ function Seidel() {
     setAlgorithm(event.target.value);
   };
 
+
   const handleSizeChange = (event) => {
-    setSize(parseInt(event.target.value, 10));
+    let newSize = parseInt(event.target.value, 10);
+    if (isNaN(newSize) || newSize < 1) {
+      newSize = 1;
+    } else if (newSize > 10 && method === 'manual' ) {
+      newSize = 10;
+    }
+    setSize(newSize);
+    setMatrix(Array(newSize).fill().map(() => Array(newSize).fill(0)));
+    setVectorB(Array(newSize).fill(0));
   };
 
   const handleMinChange = (event) => {
@@ -37,8 +47,87 @@ function Seidel() {
     setMatrixType(event.target.value);
   };
 
-  const generateMatrix = () => {
-    // Logique pour générer ou afficher la matrice
+  const generateRandomMatrix = () => {
+    const newMatrix = Array.from({ length: size }, () =>
+      Array.from({ length: size }, () => Math.floor(Math.random() * (max - min + 1)) + min)
+    );
+    setMatrix(newMatrix);
+
+    if (algorithm === 'gauss-seidel') {
+      const newVectorB = Array.from({ length: size }, () => Math.floor(Math.random() * (max - min + 1)) + min);
+      setVectorB(newVectorB);
+    }
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const lines = e.target.result.split('\n').map(line => line.trim());
+      const newMatrix = lines.slice(0, size).map(line => line.split(' ').map(Number));
+      setMatrix(newMatrix);
+
+      if (algorithm === 'gauss-seidel') {
+        const newVectorB = lines[size].split(' ').map(Number);
+        setVectorB(newVectorB);
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const handleMatrixChange = (row, col, value) => {
+    const updatedMatrix = matrix.map((r, i) =>
+      i === row ? r.map((val, j) => (j === col ? parseFloat(value) : val)) : r
+    );
+    setMatrix(updatedMatrix);
+  };
+
+  const handleVectorChange = (index, value) => {
+    const updatedVectorB = vectorB.map((val, i) => (i === index ? parseFloat(value) : val));
+    setVectorB(updatedVectorB);
+  };
+
+  const displayMatrix = () => {
+    if (method === 'random') {
+      generateRandomMatrix();
+    }
+    const matrixElements = (
+      <div>
+        <h5>Matrix (M):</h5>
+        <table className="matrix-table">
+          <tbody>
+            {matrix.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                <td>[</td>
+                {row.map((value, colIndex) => (
+                  <td key={colIndex}>{value}</td>
+                ))}
+                <td>]</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {algorithm === 'gauss-seidel' && (
+          <>
+            <h5>Vector (b):</h5>
+            <table className="matrix-table">
+              <tbody>
+                <tr>
+                  <td>[</td>
+                  {vectorB.map((value, index) => (
+                    <td key={index}>{value}</td>
+                  ))}
+                  <td>]</td>
+                </tr>
+              </tbody>
+            </table>
+          </>
+        )}
+      </div>
+    );
+    setMatrixDisplay(matrixElements);
   };
 
   const calculate = () => {
@@ -140,32 +229,51 @@ function Seidel() {
           <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
             <h5 className="text-center">Enter Matrix (M)</h5>
             <Form.Group className="mb-3">
-              <div>
-                {[...Array(size)].map((_, i) => (
-                  <Row key={i} className="justify-content-center">
-                    {[...Array(size)].map((_, j) => (
-                      <Col sm="auto" key={j}>
-                        <Form.Control type="number" placeholder={`M[${i}][${j}]`} />
-                      </Col>
-                    ))}
-                  </Row>
-                ))}
-              </div>
-            </Form.Group>
+      <div>
+        {[...Array(size)].map((_, i) => (
+          <Row key={i} className="justify-content-center">
+            {[...Array(size)].map((_, j) => (
+              <Col sm="auto" key={j}>
+                <Form.Control 
+                  type="number" 
+                  placeholder={`[${i}][${j}]`} 
+                  
+                  onChange={(e) => handleMatrixChange(i, j, e.target.value)}
+                  className={
+                    size >8 ? 'small-input' : 
+                    size >= 6 && size <= 8 ? 'moyenne-input' : 
+                    'normal-input'
+                  }
+                />
+              </Col>
+            ))}
+          </Row>
+        ))}
+      </div>
+    </Form.Group>
 
             {/* Entrée du vecteur si Gauss-Seidel est sélectionné */}
-            {algorithm === 'gauss-seidel' && (
-              <Form.Group className="mb-3">
-                <h5 className="text-center">Enter Vector (b)</h5>
-                <Row className="justify-content-center">
-                  {[...Array(size)].map((_, i) => (
-                    <Col sm="auto" key={i}>
-                      <Form.Control type="number" placeholder={`b[${i}]`} />
+    {algorithm === 'gauss-seidel' && (
+      <Form.Group className="mb-3">
+        <h5 className="text-center">Enter Vector (b)</h5>
+        <Row className="justify-content-center">
+          {[...Array(size)].map((_, i) => (
+            <Col sm="auto" key={i}>
+              <Form.Control 
+                type="number" 
+                placeholder={`b[${i}]`} 
+                onChange={(e) => handleVectorChange(i, e.target.value)}
+                className={
+                  size > 8? 'small-input' : 
+                  size >= 6 && size <= 8 ? 'moyenne-input' : 
+                  'normal-input'
+                }
+                />
                     </Col>
-                  ))}
+                 ))}
                 </Row>
-              </Form.Group>
-            )}
+            </Form.Group>
+             )}
           </Card>
         )}
 
@@ -190,19 +298,28 @@ function Seidel() {
           <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
             <Form.Group className="mb-3">
               <Form.Label>Upload Matrix File</Form.Label>
-              <Form.Control type="file" />
+              <Form.Control type="file" onChange={handleFileUpload} />
             </Form.Group>
           </Card>
         )}
 
         {/* Boutons d'actions */}
         <div className="text-center mt-4">
-          <Button className="btn-show-matrix mx-2" onClick={generateMatrix}>Show Matrix</Button>
+          <Button className="btn-show-matrix mx-2" onClick={displayMatrix}>Show Matrix</Button>
           <Button className="btn-calculate mx-2" onClick={calculate}>Calculate</Button>
         </div>
+         {/* Affichage de la matrice */}
+         {matrixDisplay && (
+          <Card className="p-3 mt-4 text-center" style={{ borderColor: '#FFD580' }}>
+            {matrixDisplay}
+          </Card>
+        )}
       </Card>
     </Container>
   );
 }
 
 export default Seidel;
+
+
+
