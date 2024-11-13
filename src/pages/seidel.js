@@ -1,6 +1,7 @@
 // src/pages/Seidel.js
 import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
+import { gaussSeidel } from '../Algorithms/Algorithm';
 import './seidel.css';
 
 function Seidel() {
@@ -131,7 +132,11 @@ function Seidel() {
   };
 
   const calculate = () => {
-    // Logique pour les calculs sur la matrice
+    console.log(matrix);
+    const initialGuess = [0, 0, 0];
+    const tolerance = 1e-10;
+    const maxIterations = 100;
+    const result = gaussSeidel(matrix, vectorB, initialGuess, tolerance, maxIterations);
   };
 
   return (

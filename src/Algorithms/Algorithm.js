@@ -1,10 +1,4 @@
-function gaussSeidel(
-    A: number[][],
-    b: number[],
-    x: number[] = [],
-    tolerance: number = 1e-10,
-    maxIterations: number = 100
-): number[] | null {
+export function gaussSeidel(A, b, x = [], tolerance = 1e-10, maxIterations = 100) {
     const n = A.length;
     if (x.length === 0) x = new Array(n).fill(0);
     for (let k = 0; k < maxIterations; k++) {
@@ -21,7 +15,6 @@ function gaussSeidel(
             x[i] = newX;
         }
         if (maxDifference < tolerance) {
-            console.log(`Converged after ${k + 1} iterations.`);
             return x;
         }
     }
