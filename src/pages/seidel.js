@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { gaussSeidel } from '../Algorithms/Algorithm';
 import './seidel.css';
+import { generateMatrixByType } from '../Algorithms/typematrice';
 
 function Seidel() {
   const [method, setMethod] = useState('manual');
@@ -12,7 +13,7 @@ function Seidel() {
   const [size, setSize] = useState(3);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(10);
-  const [matrixType, setMatrixType] = useState('triangular-lower');
+  const [matrixType, setMatrixType] = useState('dense');
   const [matrixDisplay, setMatrixDisplay] = useState(null);
 
   const handleMethodChange = (event) => {
@@ -49,16 +50,12 @@ function Seidel() {
   };
 
   const generateRandomMatrix = () => {
-    const newMatrix = Array.from({ length: size }, () =>
-      Array.from({ length: size }, () => Math.floor(Math.random() * (max - min + 1)) + min)
-    );
-    setMatrix(newMatrix);
-
-    if (algorithm === 'gauss-seidel') {
-      const newVectorB = Array.from({ length: size }, () => Math.floor(Math.random() * (max - min + 1)) + min);
-      setVectorB(newVectorB);
-    }
+    const { matrix, vectorB } = generateMatrixByType(size, matrixType, min, max, algorithm);
+  
+    setMatrix(matrix);
+    setVectorB(vectorB);
   };
+
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -132,11 +129,6 @@ function Seidel() {
   };
 
   const calculate = () => {
-    console.log(matrix);
-    const initialGuess = [0, 0, 0];
-    const tolerance = 1e-10;
-    const maxIterations = 100;
-    const result = gaussSeidel(matrix, vectorB, initialGuess, tolerance, maxIterations);
   };
 
   return (
@@ -201,6 +193,7 @@ function Seidel() {
               <Form.Label column sm={3} className="text-center">Matrix Type</Form.Label>
               <Col sm={6}>
                 <Form.Control as="select" value={matrixType} onChange={handleMatrixTypeChange} >
+                  <option value="dense">dense</option>
                   <option value="triangular-lower">Lower Triangular</option>
                   <option value="triangular-upper">Upper Triangular</option>
                   <option value="half-band-lower">Lower Half-Band</option>

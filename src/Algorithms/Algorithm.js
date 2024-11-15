@@ -4,7 +4,7 @@
     for (let k = 0; k < maxIterations; k++) {
         let maxDifference = 0;
         for (let i = 0; i < n; i++) {
-            let sum = b[i];
+            let sum = b[i];  
             for (let j = 0; j < n; j++) {
                 if (j !== i) {
                     sum -= A[i][j] * x[j];
