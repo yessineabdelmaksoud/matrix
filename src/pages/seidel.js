@@ -1,7 +1,7 @@
 // src/pages/Seidel.js
 import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
-import { gaussSeidel } from '../Algorithms/Algorithm';
+import { transpose, determinant, inverse, isPositiveDefinite, gaussSeidel } from '../Algorithms/Algorithm';
 import './seidel.css';
 import { generateMatrixByType } from '../Algorithms/typematrice';
 
@@ -15,6 +15,7 @@ function Seidel() {
   const [max, setMax] = useState(10);
   const [matrixType, setMatrixType] = useState('dense');
   const [matrixDisplay, setMatrixDisplay] = useState(null);
+  const [calculationDisplay, setCalculationDisplay] = useState(null);
 
   const handleMethodChange = (event) => {
     setMethod(event.target.value);
@@ -158,10 +159,48 @@ const downloadMatrix = () => {
     console.error("Conditions non respectées : méthode non random ou taille ≤ 30.");
   }
 };
+const calculate = () => {
+  try {
+      let result;
 
-
-  const calculate = () => {
-  };
+      switch (algorithm) {
+          case 'transpose':
+              result = transpose(matrix);
+              setCalculationDisplay(renderMatrixDisplay(result, null));
+              break;
+          case 'determinant':
+              result = determinant(matrix);
+              setCalculationDisplay(<h5>Determinant: {result}</h5>);
+              break;
+          case 'inverse':
+              result = inverse(matrix);
+              setCalculationDisplay(renderMatrixDisplay(result, null));
+              break;
+          case 'positive-definite':
+              result = isPositiveDefinite(matrix);
+              setCalculationDisplay(
+                  <h5>
+                      {result ? "The matrix is positive definite." : "The matrix is not positive definite."}
+                  </h5>
+              );
+              break;
+          case 'gauss-seidel':
+              const { x, iterations, complexity } = gaussSeidel(matrix, vectorB);
+              setCalculationDisplay(
+                  <div>
+                      <h5>Solution (x): {x.join(", ")}</h5>
+                      <p>Iterations: {iterations}</p>
+                      <p>Complexity: {complexity}</p>
+                  </div>
+              );
+              break;
+          default:
+              setCalculationDisplay(<h5>Please select a valid algorithm.</h5>);
+      }
+  } catch (error) {
+      setCalculationDisplay(<h5>Error: {error.message}</h5>);
+  }
+};
 
   return (
     <Container className="d-flex justify-content-center mt-5" >
@@ -352,6 +391,11 @@ const downloadMatrix = () => {
             {matrixDisplay}
           </Card>
         )}
+        {calculationDisplay && (
+                <Card className="p-3 mt-4" style={{ borderColor: '#FFD580' }}>
+                    {calculationDisplay}
+                </Card>
+            )}
       </Card>
     </Container>
   );
