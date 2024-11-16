@@ -54,6 +54,8 @@ function Seidel() {
   
     setMatrix(matrix);
     setVectorB(vectorB);
+
+    setMatrixDisplay(renderMatrixDisplay(matrix, vectorB));
   };
 
 
@@ -88,45 +90,75 @@ function Seidel() {
   };
 
   const displayMatrix = () => {
-    if (method === 'random') {
-      generateRandomMatrix();
+    // Générer l'affichage directement pour la méthode manuelle ou fichier
+    if (method !== 'random') {
+        setMatrixDisplay(renderMatrixDisplay(matrix, vectorB));
+    } else {
+        // Appeler generateRandomMatrix qui s'occupe aussi d'afficher
+        generateRandomMatrix();
     }
-    const matrixElements = (
-      <div>
+};
+
+// Fonction pour rendre l'affichage de la matrice et du vecteur
+const renderMatrixDisplay = (matrix, vectorB) => (
+    <div>
         <h5>Matrix (M):</h5>
         <table className="matrix-table">
-          <tbody>
-            {matrix.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                <td>[</td>
-                {row.map((value, colIndex) => (
-                  <td key={colIndex}>{value}</td>
+            <tbody>
+                {matrix.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                        <td>[</td>
+                        {row.map((value, colIndex) => (
+                            <td key={colIndex}>{value}</td>
+                        ))}
+                        <td>]</td>
+                    </tr>
                 ))}
-                <td>]</td>
-              </tr>
-            ))}
-          </tbody>
+            </tbody>
         </table>
         {algorithm === 'gauss-seidel' && (
-          <>
-            <h5>Vector (b):</h5>
-            <table className="matrix-table">
-              <tbody>
-                <tr>
-                  <td>[</td>
-                  {vectorB.map((value, index) => (
-                    <td key={index}>{value}</td>
-                  ))}
-                  <td>]</td>
-                </tr>
-              </tbody>
-            </table>
-          </>
+            <>
+                <h5>Vector (b):</h5>
+                <table className="matrix-table">
+                    <tbody>
+                        <tr>
+                            <td>[</td>
+                            {vectorB.map((value, index) => (
+                                <td key={index}>{value}</td>
+                            ))}
+                            <td>]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </>
         )}
-      </div>
-    );
-    setMatrixDisplay(matrixElements);
-  };
+    </div>
+);
+
+const downloadMatrix = () => {
+
+  if (method === 'random' && size > 30) {
+    const { matrix: generatedMatrix, vectorB: generatedVectorB } = generateMatrixByType(size, matrixType, min, max, algorithm);
+    setMatrix(generatedMatrix); // Met à jour la matrice générée
+    setVectorB(generatedVectorB); // Met à jour le vecteur généré
+
+    // Préparer le contenu du fichier
+    let matrixContent = generatedMatrix.map(row => row.join(",")).join("\n");
+    if (algorithm === 'gauss-seidel') {
+      matrixContent += `\n${generatedVectorB.join(",")}`;
+    }
+
+    // Créer le fichier Blob et le télécharger
+    const blob = new Blob([matrixContent], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "random_matrix.csv"; // Nom du fichier
+    link.click();
+  } else {
+    console.error("Conditions non respectées : méthode non random ou taille ≤ 30.");
+  }
+};
+
 
   const calculate = () => {
   };
@@ -303,9 +335,17 @@ function Seidel() {
 
         {/* Boutons d'actions */}
         <div className="text-center mt-4">
-          <Button className="btn-show-matrix mx-2" onClick={displayMatrix}>Show Matrix</Button>
-          <Button className="btn-calculate mx-2" onClick={calculate}>Calculate</Button>
-        </div>
+  {method === 'random' && size > 30 ? (
+    <Button className="btn-download mx-2" onClick={downloadMatrix}>
+      Download Matrix
+    </Button>
+  ) : (
+    <Button className="btn-show-matrix mx-2" onClick={displayMatrix}>
+      Show Matrix
+    </Button>
+  )}
+  <Button className="btn-calculate mx-2" onClick={calculate}>Calculate</Button>
+</div>
          {/* Affichage de la matrice */}
          {matrixDisplay && (
           <Card className="p-3 mt-4 text-center" style={{ borderColor: '#FFD580' }}>

@@ -40,6 +40,16 @@
   border: none;
 }
 
+.btn-download {
+  background-color: #FFD580; /* Orange clair */
+  color: #FFFFFF;
+  border: none;
+}
+
+.btn-download:hover {
+  background-color: #FFA040;
+}
+
 .btn-calculate:hover {
   background-color: #FFA040;
 }
