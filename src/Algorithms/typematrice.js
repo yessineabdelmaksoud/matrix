@@ -83,8 +83,12 @@ export const generateMatrixByType = (size, matrixType, min, max, algorithm) => {
         let L = Array.from({ length: size }, () => Array(size).fill(0));
         for (let i = 0; i < size; i++) {
           for (let j = 0; j <= i; j++) {
+            if (i === j) {
+              L[i][j] = Math.floor(Math.random() * (max - min + 1))+1; // Assure que les éléments diagonaux sont strictement positifs
+            } else {
             L[i][j] = Math.floor(Math.random() * (max - min + 1)) + min;
           }
+         }
         }
         for (let i = 0; i < size; i++) {
           for (let j = i; j < size; j++) {

@@ -1,7 +1,7 @@
 // src/pages/Seidel.js
 import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
-import { transpose, determinant, inverse, isPositiveDefinite, gaussSeidel } from '../Algorithms/Algorithm';
+import { transpose, determinant, inverseMatrix, estDefiniePositive, gaussSeidel } from '../Algorithms/Algorithm';
 import './seidel.css';
 import { generateMatrixByType } from '../Algorithms/typematrice';
 
@@ -173,27 +173,31 @@ const calculate = () => {
               setCalculationDisplay(<h5>Determinant: {result}</h5>);
               break;
           case 'inverse':
-              result = inverse(matrix);
+              result = inverseMatrix(matrix);
               setCalculationDisplay(renderMatrixDisplay(result, null));
               break;
           case 'positive-definite':
-              result = isPositiveDefinite(matrix);
+              result = estDefiniePositive(matrix);
               setCalculationDisplay(
                   <h5>
                       {result ? "The matrix is positive definite." : "The matrix is not positive definite."}
                   </h5>
               );
               break;
-          case 'gauss-seidel':
-              const { x, iterations, complexity } = gaussSeidel(matrix, vectorB);
-              setCalculationDisplay(
-                  <div>
-                      <h5>Solution (x): {x.join(", ")}</h5>
-                      <p>Iterations: {iterations}</p>
-                      <p>Complexity: {complexity}</p>
-                  </div>
-              );
-              break;
+              case 'gauss-seidel':
+    const { x, iterations, complexity, converged } = gaussSeidel(matrix, vectorB);
+    setCalculationDisplay(
+        <div>
+            {iterations.map((iteration, index) => (
+                <p key={index}>Iteration {index + 1}: x = [{iteration.join(", ")}]</p>
+            ))}
+            <h5>Solution finale (x): {x.join(", ")}</h5>
+            <p>Iterations: {iterations.length}</p>
+            <p>Complexity: {complexity}</p>
+            <p>Converged: {converged ? "Yes" : "No"}</p>
+        </div>
+    );
+    break;
           default:
               setCalculationDisplay(<h5>Please select a valid algorithm.</h5>);
       }
