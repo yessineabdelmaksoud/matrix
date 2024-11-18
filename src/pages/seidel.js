@@ -16,6 +16,9 @@ function Seidel() {
   const [matrixType, setMatrixType] = useState('dense');
   const [matrixDisplay, setMatrixDisplay] = useState(null);
   const [calculationDisplay, setCalculationDisplay] = useState(null);
+  const [tolerance, setTolerance] = useState(1e-10); 
+  const [maxIterations, setMaxIterations] = useState(1000000); 
+
 
   const handleMethodChange = (event) => {
     setMethod(event.target.value);
@@ -88,6 +91,14 @@ function Seidel() {
   const handleVectorChange = (index, value) => {
     const updatedVectorB = vectorB.map((val, i) => (i === index ? parseFloat(value) : val));
     setVectorB(updatedVectorB);
+  };
+
+  const handleToleranceChange = (event) => {
+    setTolerance(Math.pow(10, -parseInt(event.target.value, 10)));
+  };
+
+  const handleMaxIterationsChange = (event) => {
+    setMaxIterations(parseInt(event.target.value, 10));
   };
 
   const displayMatrix = () => {
@@ -185,7 +196,7 @@ const calculate = () => {
               );
               break;
               case 'gauss-seidel':
-    const { x, iterations, complexity, converged } = gaussSeidel(matrix, vectorB);
+    const { x, iterations, complexity, converged } = gaussSeidel(matrix, vectorB, tolerance, maxIterations);
     setCalculationDisplay(
         <div>
             {iterations.map((iteration, index) => (
@@ -295,6 +306,22 @@ const calculate = () => {
               </Form.Control>
             </Col>
           </Form.Group>
+          {algorithm === 'gauss-seidel' && (
+            <>
+              <Form.Group as={Row} className="mt-4 justify-content-center">
+                <Form.Label column sm={3} className="text-center">Tolerance (10^-q)</Form.Label>
+                <Col sm={6}>
+                  <Form.Control type="number" value={Math.log10(tolerance) * -1} onChange={handleToleranceChange} />
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row} className="mt-4 justify-content-center">
+                <Form.Label column sm={3} className="text-center">Max Iterations</Form.Label>
+                <Col sm={6}>
+                  <Form.Control type="number" value={maxIterations} onChange={handleMaxIterationsChange} />
+                </Col>
+              </Form.Group>
+            </>
+          )}
         </Card>
 
         {/* Entrée de matrice et vecteur pour méthode "Manually" */}
