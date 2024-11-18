@@ -148,7 +148,7 @@ export const estRayonSpectralInferieurAUn = (A) => {
   return spectralRadius < 1;
 };
 
-export const gaussSeidel = (A, b, tolerance = 1e-10, maxIterations = 1000000) => {
+export const gaussSeidel = (A, b, tolerance, maxIterations ) => {
   const n = A.length;
 
   // Vérification des conditions de convergence

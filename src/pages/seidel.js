@@ -4,6 +4,7 @@ import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { transpose, determinant, inverseMatrix, estDefiniePositive, gaussSeidel } from '../Algorithms/Algorithm';
 import './seidel.css';
 import { generateMatrixByType } from '../Algorithms/typematrice';
+import Fraction from 'fraction.js';
 
 function Seidel() {
   const [method, setMethod] = useState('manual');
@@ -18,6 +19,20 @@ function Seidel() {
   const [calculationDisplay, setCalculationDisplay] = useState(null);
   const [tolerance, setTolerance] = useState(1e-10); 
   const [maxIterations, setMaxIterations] = useState(1000000); 
+
+  const formatFraction = (fraction) => {
+    const numerator = fraction.n; // Numérateur
+    const denominator = fraction.d; // Dénominateur
+    const isNegative = numerator < 0; // Vérifie si le numérateur est négatif
+    return `${isNegative ? '-' : ''}${(numerator)}/${denominator}`; // Affiche le signe automatiquement
+  };
+
+  const roundToTolerance = (value, tolerance) => {
+    const precision = Math.ceil(-Math.log10(tolerance));
+    return parseFloat(value.toFixed(precision));
+  };
+  
+
 
 
   const handleMethodChange = (event) => {
@@ -172,50 +187,61 @@ const downloadMatrix = () => {
 };
 const calculate = () => {
   try {
-      let result;
+    let result;
 
-      switch (algorithm) {
-          case 'transpose':
-              result = transpose(matrix);
-              setCalculationDisplay(renderMatrixDisplay(result, null));
-              break;
-          case 'determinant':
-              result = determinant(matrix);
-              setCalculationDisplay(<h5>Determinant: {result}</h5>);
-              break;
-          case 'inverse':
-              result = inverseMatrix(matrix);
-              setCalculationDisplay(renderMatrixDisplay(result, null));
-              break;
-          case 'positive-definite':
-              result = estDefiniePositive(matrix);
-              setCalculationDisplay(
-                  <h5>
-                      {result ? "The matrix is positive definite." : "The matrix is not positive definite."}
-                  </h5>
-              );
-              break;
-              case 'gauss-seidel':
-    const { x, iterations, complexity, converged } = gaussSeidel(matrix, vectorB, tolerance, maxIterations);
-    setCalculationDisplay(
-        <div>
+    switch (algorithm) {
+      case 'transpose':
+        result = transpose(matrix);
+        setCalculationDisplay(renderMatrixDisplay(result, null));
+        break;
+      case 'determinant':
+        result = determinant(matrix);
+        setCalculationDisplay(<h5>Determinant: {result}</h5>);
+        break;
+      case 'inverse':
+        result = inverseMatrix(matrix);
+        setCalculationDisplay(renderMatrixDisplay(result, null));
+        break;
+      case 'positive-definite':
+        result = estDefiniePositive(matrix);
+        setCalculationDisplay(
+          <h5>
+            {result ? "The matrix is positive definite." : "The matrix is not positive definite."}
+          </h5>
+        );
+        break;
+      case 'gauss-seidel':
+        const { x, iterations, complexity, converged } = gaussSeidel(matrix, vectorB, tolerance, maxIterations);
+
+        const xFractions = x.map((value) => {
+          const fraction = new Fraction(Number(value)); // Convertir explicitement en nombre
+          return formatFraction(fraction);
+        });
+        const xRounded = x.map((value) => roundToTolerance(value, tolerance));
+
+        setCalculationDisplay(
+          <div>
             {iterations.map((iteration, index) => (
-                <p key={index}>Iteration {index + 1}: x = [{iteration.join(", ")}]</p>
+              <p key={index}>Iteration {index + 1}: x = [{iteration.join(", ")}]</p>
             ))}
             <h5>Solution finale (x): {x.join(", ")}</h5>
+            <h5>Solution finale en fraction (x): {xFractions.join(", ")}</h5>
+            <h5>Solution arrondie finale (x): {xRounded.join(", ")}</h5>
             <p>Iterations: {iterations.length}</p>
             <p>Complexity: {complexity}</p>
             <p>Converged: {converged ? "Yes" : "No"}</p>
-        </div>
-    );
-    break;
-          default:
-              setCalculationDisplay(<h5>Please select a valid algorithm.</h5>);
-      }
+          </div>
+        );
+        break;
+      default:
+        setCalculationDisplay(<h5>Please select a valid algorithm.</h5>);
+    }
   } catch (error) {
-      setCalculationDisplay(<h5>Error: {error.message}</h5>);
+    setCalculationDisplay(<h5>Error: {error.message}</h5>);
   }
 };
+
+
 
   return (
     <Container className="d-flex justify-content-center mt-5" >
