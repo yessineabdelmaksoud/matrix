@@ -86,42 +86,8 @@ function AboutUs() {
               </a>
             </Col>
           </Row>
-          <Row className="mt-5">
-  <Col>
-    <h4 className="text-center">Our Journey</h4>
-    <div className="timeline">
-      <div className="timeline-item">
-        <div className="timeline-date">Phase 1</div>
-        <div className="timeline-content">
-          <h5>Idea & Research</h5>
-          <p>We brainstormed and analyzed various matrix algorithms.</p>
-        </div>
-      </div>
-      <div className="timeline-item">
-        <div className="timeline-date">Phase 2</div>
-        <div className="timeline-content">
-          <h5>Development</h5>
-          <p>We built the core functionality using React and Bootstrap and javascript .</p>
-        </div>
-      </div>
-      <div className="timeline-item">
-        <div className="timeline-date">Phase 3</div>
-        <div className="timeline-content">
-          <h5>Finalization</h5>
-          <p>We tested and optimized the site for the best user experience.</p>
-        </div>
-      </div>
-    </div>
-  </Col>
-</Row>
-<Row className="text-center mt-5">
-  <Col>
-    <blockquote className="blockquote">
-      <p>“Mathematics is not about numbers, equations, or algorithms: it is about understanding.”</p>
-      <footer className="blockquote-footer">William Paul Thurston</footer>
-    </blockquote>
-  </Col>
-</Row>
+          
+
 <Row className="mt-5 text-center">
   <Col md={3}>
     <div className="tech-card">
@@ -172,12 +138,11 @@ function AboutUs() {
     </form>
   </Col>
 </Row>
-<Row className="text-center my-5">
+<Row className="text-center mt-5">
   <Col>
-    <h4>What People Say</h4>
     <blockquote className="blockquote">
-      <p>“This site is a fantastic resource for solving matrix problems!”</p>
-      <footer className="blockquote-footer">Prof. Cyrine Marrakchi</footer>
+      <p>“Mathematics is not about numbers, equations, or algorithms: it is about understanding.”</p>
+      <footer className="blockquote-footer">William Paul Thurston</footer>
     </blockquote>
   </Col>
 </Row>
