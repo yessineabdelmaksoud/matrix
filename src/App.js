@@ -5,6 +5,7 @@ import Home from './home';
 import Footer from './Footer';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Seidel from './pages/seidel'; 
+import AboutUs from './pages/AboutUs';
 
 function App() {
   const location = useLocation();
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/gauss-seidel" element={<Seidel />} />
+        <Route path="/about-us" element={<AboutUs />} />
       </Routes>
       {showFooter && <Footer />}
     </>

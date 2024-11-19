@@ -1,0 +1,104 @@
+.about-us-page {
+    font-family: Arial, sans-serif;
+  }
+  
+  .about-us-header {
+    background: url('/public/oo.jpg') center/cover no-repeat;
+    color: rgb(51, 0, 0);
+    text-align: center;
+    padding: 150px 20px;
+    position: relative;
+    opacity: 0.9;
+  }
+  
+  .about-us-header h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+  
+  .about-us-header h2 {
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+  
+  .profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  .team-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+  }
+  
+  .text-center h5 {
+    font-weight: 600;
+  }
+  
+  .btn-primary {
+    background-color: #f7931e;
+    border: none;
+    padding: 10px 20px;
+  }
+  
+  .btn-primary:hover {
+    background-color: #d6791e;
+  }
+  .timeline {
+    position: relative;
+    margin: 20px 0;
+  }
+  
+  .timeline-item {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .timeline-date {
+    background: #f7931e;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .timeline-content {
+    background: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  .blockquote {
+    font-style: italic;
+    background: #f4f4f4;
+    padding: 20px;
+    border-left: 5px solid #f7931e;
+  }
+  .blockquote-footer {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  .tech-card {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px 0;
+  }
+  
+  .tech-icon {
+    width: 50px;
+    margin-bottom: 10px;
+  }
+  .linkedin-link {
+    color: #0077b5; /* Couleur LinkedIn */
+    text-decoration: none;
+  }
+  
+  .linkedin-link:hover {
+    text-decoration: underline;
+  }      

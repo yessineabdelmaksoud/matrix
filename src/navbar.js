@@ -28,8 +28,9 @@ function CustomNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto"> 
-          <Nav.Link onClick={() => navigate('/')}>Home</Nav.Link>
-            <Nav.Link href="#">Historique</Nav.Link>
+            <Nav.Link onClick={() => navigate('/')}>Home</Nav.Link>
+            <Nav.Link>Historique</Nav.Link>
+            <Nav.Link onClick={() => navigate('/about-us')}>About Us</Nav.Link>
             <NavDropdown title="Type Algo" onSelect={handleAlgorithmChange}>
               <NavDropdown.Item eventKey="/decomposition-lu">Décomposition LU</NavDropdown.Item>
               <NavDropdown.Item eventKey="/cholesky">Cholesky</NavDropdown.Item>
