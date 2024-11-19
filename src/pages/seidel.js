@@ -1,10 +1,11 @@
-// src/pages/Seidel.js
 import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
-import { transpose, determinant, inverseMatrix, estDefiniePositive, gaussSeidel } from '../Algorithms/Algorithm';
+import { transpose, determinant, inverseMatrix, estDefiniePositive, gaussSeidel,estDiagonaleDominante } from '../Algorithms/Algorithm';
 import './seidel.css';
 import { generateMatrixByType } from '../Algorithms/typematrice';
 import Fraction from 'fraction.js';
+import { BlockMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
 
 function Seidel() {
   const [method, setMethod] = useState('manual');
@@ -17,8 +18,8 @@ function Seidel() {
   const [matrixType, setMatrixType] = useState('dense');
   const [matrixDisplay, setMatrixDisplay] = useState(null);
   const [calculationDisplay, setCalculationDisplay] = useState(null);
-  const [tolerance, setTolerance] = useState(1e-10); 
-  const [maxIterations, setMaxIterations] = useState(1000000); 
+  const [tolerance, setTolerance] = useState(1e-10);
+  const [maxIterations, setMaxIterations] = useState(1000000);
 
   const formatFraction = (fraction) => {
     const numerator = fraction.n; // Numérateur
@@ -31,9 +32,6 @@ function Seidel() {
     const precision = Math.ceil(-Math.log10(tolerance));
     return parseFloat(value.toFixed(precision));
   };
-  
-
-
 
   const handleMethodChange = (event) => {
     setMethod(event.target.value);
@@ -42,7 +40,6 @@ function Seidel() {
   const handleAlgorithmChange = (event) => {
     setAlgorithm(event.target.value);
   };
-
 
   const handleSizeChange = (event) => {
     let newSize = parseInt(event.target.value, 10);
@@ -70,13 +67,12 @@ function Seidel() {
 
   const generateRandomMatrix = () => {
     const { matrix, vectorB } = generateMatrixByType(size, matrixType, min, max, algorithm);
-  
+
     setMatrix(matrix);
     setVectorB(vectorB);
 
     setMatrixDisplay(renderMatrixDisplay(matrix, vectorB));
   };
-
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -130,40 +126,25 @@ function Seidel() {
 const renderMatrixDisplay = (matrix, vectorB) => (
     <div>
         <h5>Matrix (M):</h5>
-        <table className="matrix-table">
-            <tbody>
-                {matrix.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                        <td>[</td>
-                        {row.map((value, colIndex) => (
-                            <td key={colIndex}>{value}</td>
-                        ))}
-                        <td>]</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <BlockMath>
+          {`\\begin{bmatrix}
+            ${matrix.map(row => row.join(' & ')).join(' \\\\ ')}
+          \\end{bmatrix}`}
+        </BlockMath>
         {algorithm === 'gauss-seidel' && (
             <>
                 <h5>Vector (b):</h5>
-                <table className="matrix-table">
-                    <tbody>
-                        <tr>
-                            <td>[</td>
-                            {vectorB.map((value, index) => (
-                                <td key={index}>{value}</td>
-                            ))}
-                            <td>]</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <BlockMath>
+                  {`\\begin{bmatrix}
+                    ${vectorB.join(' \\\\ ')}
+                  \\end{bmatrix}`}
+                </BlockMath>
             </>
         )}
     </div>
 );
 
 const downloadMatrix = () => {
-
   if (method === 'random' && size > 30) {
     const { matrix: generatedMatrix, vectorB: generatedVectorB } = generateMatrixByType(size, matrixType, min, max, algorithm);
     setMatrix(generatedMatrix); // Met à jour la matrice générée
@@ -185,6 +166,7 @@ const downloadMatrix = () => {
     console.error("Conditions non respectées : méthode non random ou taille ≤ 30.");
   }
 };
+
 const calculate = () => {
   try {
     let result;
@@ -210,6 +192,14 @@ const calculate = () => {
           </h5>
         );
         break;
+        case 'estDiagonaleDominante':
+          result = estDiagonaleDominante(matrix);
+          setCalculationDisplay(
+            <h5>
+              {result ? "The matrix is Diagonale Dominant." : "The matrix is not Diagonale Dominant."}
+            </h5>
+          );
+          break;
       case 'gauss-seidel':
         const { x, iterations, complexity, converged } = gaussSeidel(matrix, vectorB, tolerance, maxIterations);
 
@@ -241,11 +231,8 @@ const calculate = () => {
   }
 };
 
-
-
   return (
     <Container className="d-flex justify-content-center mt-5" >
-      
       <Card className="aa" style={{ width: '80%', padding: '20px', borderColor: '#FFD580'}}>
       <br/>
         <h2 className="text-center">Gauss-Seidel Calculator</h2>
@@ -286,9 +273,6 @@ const calculate = () => {
               />
             </Col>
           </Row>
-
-          {/* Type de matrice pour méthode "Random" */}
-          
         </Card>
 
         {/* Taille de la matrice et sélection de l'algorithme */}
@@ -328,6 +312,7 @@ const calculate = () => {
                 <option value="determinant">Determinant</option>
                 <option value="inverse">Inverse</option>
                 <option value="positive-definite">Positive Definite</option>
+                <option value="estDiagonaleDominante">Diagonale Dominante</option>
                 <option value="gauss-seidel">Gauss-Seidel</option>
               </Form.Control>
             </Col>
@@ -360,14 +345,13 @@ const calculate = () => {
           <Row key={i} className="justify-content-center">
             {[...Array(size)].map((_, j) => (
               <Col sm="auto" key={j}>
-                <Form.Control 
-                  type="number" 
-                  placeholder={`[${i}][${j}]`} 
-                  
+                <Form.Control
+                  type="number"
+                  placeholder={`[${i}][${j}]`}
                   onChange={(e) => handleMatrixChange(i, j, e.target.value)}
                   className={
-                    size >8 ? 'small-input' : 
-                    size >= 6 && size <= 8 ? 'moyenne-input' : 
+                    size >8 ? 'small-input' :
+                    size >= 6 && size <= 8 ? 'moyenne-input' :
                     'normal-input'
                   }
                 />
@@ -385,13 +369,13 @@ const calculate = () => {
         <Row className="justify-content-center">
           {[...Array(size)].map((_, i) => (
             <Col sm="auto" key={i}>
-              <Form.Control 
-                type="number" 
-                placeholder={`b[${i}]`} 
+              <Form.Control
+                type="number"
+                placeholder={`b[${i}]`}
                 onChange={(e) => handleVectorChange(i, e.target.value)}
                 className={
-                  size > 8? 'small-input' : 
-                  size >= 6 && size <= 8 ? 'moyenne-input' : 
+                  size > 8? 'small-input' :
+                  size >= 6 && size <= 8 ? 'moyenne-input' :
                   'normal-input'
                 }
                 />
@@ -459,6 +443,3 @@ const calculate = () => {
 }
 
 export default Seidel;
-
-
-

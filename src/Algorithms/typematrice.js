@@ -75,7 +75,7 @@ export const generateMatrixByType = (size, matrixType, min, max, algorithm) => {
                         rowSum += Math.abs(newMatrix[i][j]);
                     }
           }
-          newMatrix[i][i] = rowSum + Math.floor(Math.random() * (max - min + 1)) + min;
+          newMatrix[i][i] = rowSum + Math.floor(Math.random() * (max - min + 1)) + 1;
         }
         break;
 

@@ -80,5 +80,29 @@
 }
 
 
+.matrix-view {
+  margin: 20px auto;
+  text-align: center;
+}
+
+.matrix-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.matrix-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.matrix-row input {
+  margin: 5px;
+  text-align: center;
+  width: 40px;
+}
+
+
+
 
 

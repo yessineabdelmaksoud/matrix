@@ -183,7 +183,7 @@ export const gaussSeidel = (A, b, tolerance, maxIterations ) => {
       iterations.push([...x]); // Stocker la copie actuelle de x.
 
       if (maxDifference < tolerance) { // Si la convergence est atteinte, retourner la solution.
-          return { x, iterations, converged: true, complexity: totalOperations };
+          return { x, iterations, converged: true, complexity: totalOperations*2 };
       }
   }
 
