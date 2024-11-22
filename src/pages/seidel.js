@@ -20,6 +20,9 @@ function Seidel() {
   const [calculationDisplay, setCalculationDisplay] = useState(null);
   const [tolerance, setTolerance] = useState(1e-10);
   const [maxIterations, setMaxIterations] = useState(1000000);
+  const [matrixSubtype, setMatrixSubtype] = useState('');
+  const [bandStrength, setBandStrength] = useState(null);
+
 
   const formatFraction = (fraction) => {
     const numerator = fraction.n; // Numérateur
@@ -231,215 +234,250 @@ const calculate = () => {
   }
 };
 
-  return (
-    <Container className="d-flex justify-content-center mt-5" >
-      <Card className="aa" style={{ width: '80%', padding: '20px', borderColor: '#FFD580'}}>
-      <br/>
-        <h2 className="text-center">Gauss-Seidel Calculator</h2>
+return (
+  <Container className="d-flex justify-content-center mt-5" >
+    <Card className="aa" style={{ width: '80%', padding: '20px', borderColor: '#FFD580'}}>
+    <br/>
+      <h2 className="text-center">Gauss-Seidel Calculator</h2>
 
-        {/* Section pour choisir la méthode d'entrée */}
-        <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
-          <h5 className="text-center">Matrix Input Method</h5>
-          <br />
-          <Row className="justify-content-center">
-            <Col sm="auto">
-              <Form.Check
-                type="radio"
-                label="Manually"
-                name="method"
-                value="manual"
-                checked={method === 'manual'}
-                onChange={handleMethodChange}
-              />
-            </Col>
-            <Col sm="auto">
-              <Form.Check
-                type="radio"
-                label="Random"
-                name="method"
-                value="random"
-                checked={method === 'random'}
-                onChange={handleMethodChange}
-              />
-            </Col>
-            <Col sm="auto">
-              <Form.Check
-                type="radio"
-                label="File"
-                name="method"
-                value="file"
-                checked={method === 'file'}
-                onChange={handleMethodChange}
-              />
-            </Col>
-          </Row>
-        </Card>
+      {/* Section pour choisir la méthode d'entrée */}
+      <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
+        <h5 className="text-center">Matrix Input Method</h5>
+        <br />
+        <Row className="justify-content-center">
+          <Col sm="auto">
+            <Form.Check
+              type="radio"
+              label="Manually"
+              name="method"
+              value="manual"
+              checked={method === 'manual'}
+              onChange={handleMethodChange}
+            />
+          </Col>
+          <Col sm="auto">
+            <Form.Check
+              type="radio"
+              label="Random"
+              name="method"
+              value="random"
+              checked={method === 'random'}
+              onChange={handleMethodChange}
+            />
+          </Col>
+          <Col sm="auto">
+            <Form.Check
+              type="radio"
+              label="File"
+              name="method"
+              value="file"
+              checked={method === 'file'}
+              onChange={handleMethodChange}
+            />
+          </Col>
+        </Row>
+      </Card>
 
-        {/* Taille de la matrice et sélection de l'algorithme */}
-        <Card className="p-3 mb-4" style={{ borderColor: '#FFD580'}}>
-          <Form.Group as={Row} className="mb-3 justify-content-center" >
-            <Form.Label column sm={3} className="text-center">Matrix Size (n)</Form.Label>
+      {/* Taille de la matrice et sélection de l'algorithme */}
+      <Card className="p-3 mb-4" style={{ borderColor: '#FFD580'}}>
+        <Form.Group as={Row} className="mb-3 justify-content-center" >
+          <Form.Label column sm={3} className="text-center">Matrix Size (n)</Form.Label>
+          <Col sm={6}>
+            <Form.Control type="number" value={size} onChange={handleSizeChange} min="1" />
+          </Col>
+        </Form.Group>
+
+        {method === 'random' && (
+          <Form.Group as={Row} className="mt-3 justify-content-center">
+            <Form.Label column sm={3} className="text-center">Matrix Type</Form.Label>
             <Col sm={6}>
-              <Form.Control type="number" value={size} onChange={handleSizeChange} min="1" />
-            </Col>
-          </Form.Group>
-
-          {method === 'random' && (
-            <Form.Group as={Row} className="mt-3 justify-content-center">
-              <Form.Label column sm={3} className="text-center">Matrix Type</Form.Label>
-              <Col sm={6}>
-                <Form.Control as="select" value={matrixType} onChange={handleMatrixTypeChange} >
-                  <option value="dense">dense</option>
-                  <option value="triangular-lower">Lower Triangular</option>
-                  <option value="triangular-upper">Upper Triangular</option>
-                  <option value="half-band-lower">Lower Half-Band</option>
-                  <option value="half-band-upper">Upper Half-Band</option>
-                  <option value="band">Band Matrix</option>
-                  <option value="diagonally-dominant">Diagonally Dominant</option>
-                  <option value="symmetric">Symmetric</option>
-                  <option value="asymmetric">Asymmetric</option>
-                  <option value="positive-definite">Positive Definite</option>
-                </Form.Control>
-              </Col>
-            </Form.Group>
-          )}
-
-          <Form.Group as={Row} className="mt-4 justify-content-center">
-            <Form.Label column sm={3} className="text-center" >Select Algorithm</Form.Label>
-            <Col sm={6}>
-              <Form.Control as="select" value={algorithm} onChange={handleAlgorithmChange} >
-                <option value="transpose">Transpose</option>
-                <option value="determinant">Determinant</option>
-                <option value="inverse">Inverse</option>
+              <Form.Control as="select" value={matrixType} onChange={handleMatrixTypeChange} >
+                <option value="dense">dense</option>
+                <option value="triangular-lower">Lower Triangular</option>
+                <option value="triangular-upper">Upper Triangular</option>
+                <option value="half-band-lower">Lower Half-Band</option>
+                <option value="half-band-upper">Upper Half-Band</option>
+                <option value="band">Band Matrix</option>
+                <option value="diagonally-dominant">Diagonally Dominant</option>
+                <option value="symmetric">Symmetric</option>
+                <option value="asymmetric">Asymmetric</option>
                 <option value="positive-definite">Positive Definite</option>
-                <option value="estDiagonaleDominante">Diagonale Dominante</option>
-                <option value="gauss-seidel">Gauss-Seidel</option>
               </Form.Control>
             </Col>
           </Form.Group>
-          {algorithm === 'gauss-seidel' && (
-            <>
-              <Form.Group as={Row} className="mt-4 justify-content-center">
-                <Form.Label column sm={3} className="text-center">Tolerance (10^-q)</Form.Label>
-                <Col sm={6}>
-                  <Form.Control type="number" value={Math.log10(tolerance) * -1} onChange={handleToleranceChange} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mt-4 justify-content-center">
-                <Form.Label column sm={3} className="text-center">Max Iterations</Form.Label>
-                <Col sm={6}>
-                  <Form.Control type="number" value={maxIterations} onChange={handleMaxIterationsChange} />
-                </Col>
-              </Form.Group>
-            </>
-          )}
-        </Card>
+        )}
 
-        {/* Entrée de matrice et vecteur pour méthode "Manually" */}
-        {method === 'manual' && (
-          <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
-            <h5 className="text-center">Enter Matrix (M)</h5>
-            <Form.Group className="mb-3">
-      <div>
-        {[...Array(size)].map((_, i) => (
-          <Row key={i} className="justify-content-center">
-            {[...Array(size)].map((_, j) => (
-              <Col sm="auto" key={j}>
-                <Form.Control
-                  type="number"
-                  placeholder={`[${i}][${j}]`}
-                  onChange={(e) => handleMatrixChange(i, j, e.target.value)}
-                  className={
-                    size >8 ? 'small-input' :
-                    size >= 6 && size <= 8 ? 'moyenne-input' :
-                    'normal-input'
-                  }
-                />
+        <Form.Group as={Row} className="mt-4 justify-content-center">
+          <Form.Label column sm={3} className="text-center" >Select Algorithm</Form.Label>
+          <Col sm={6}>
+            <Form.Control as="select" value={algorithm} onChange={handleAlgorithmChange} >
+              <option value="transpose">Transpose</option>
+              <option value="determinant">Determinant</option>
+              <option value="inverse">Inverse</option>
+              <option value="positive-definite">Positive Definite</option>
+              <option value="estDiagonaleDominante">Diagonale Dominante</option>
+              <option value="gauss-seidel">Gauss-Seidel</option>
+            </Form.Control>
+          </Col>
+        </Form.Group>
+        {algorithm === 'gauss-seidel' && (
+          <>
+            {/* Dropdown for matrix type */}
+      <Form.Group as={Row} className="mt-3 justify-content-center">
+        <Form.Label column sm={3} className="text-center">Matrix Type</Form.Label>
+        <Col sm={6}>
+          <Form.Control
+            as="select"
+            value={matrixSubtype}
+            onChange={(e) => setMatrixSubtype(e.target.value)}
+          >
+            <option value="">Select Type</option>
+            <option value="normal">Normal</option>
+            <option value="lower-triangular">Lower Triangular</option>
+            <option value="upper-triangular">Upper Triangular</option>
+            <option value="symmetric">Symmetric</option>
+            <option value="band-lower-half">Lower Half Band</option>
+            <option value="band-upper-half">Upper Half Band</option>
+            <option value="band">Band</option>
+          </Form.Control>
+        </Col>
+      </Form.Group>
+
+      {/* Band strength input */}
+      {['band-lower-half', 'band-upper-half', 'band'].includes(matrixSubtype) && (
+        <Form.Group as={Row} className="mt-3 justify-content-center">
+          <Form.Label column sm={3} className="text-center">Band Strength (k)</Form.Label>
+          <Col sm={6}>
+            <Form.Control
+              type="number"
+              value={bandStrength || ''}
+              onChange={(e) => setBandStrength(Number(e.target.value))}
+            />
+          </Col>
+        </Form.Group>
+      )}
+            <Form.Group as={Row} className="mt-4 justify-content-center">
+              <Form.Label column sm={3} className="text-center">Tolerance (10^-q)</Form.Label>
+              <Col sm={6}>
+                <Form.Control type="number" value={Math.log10(tolerance) * -1} onChange={handleToleranceChange} />
               </Col>
-            ))}
-          </Row>
-        ))}
-      </div>
-    </Form.Group>
+            </Form.Group>
+            <Form.Group as={Row} className="mt-4 justify-content-center">
+              <Form.Label column sm={3} className="text-center">Max Iterations</Form.Label>
+              <Col sm={6}>
+                <Form.Control type="number" value={maxIterations} onChange={handleMaxIterationsChange} />
+              </Col>
+            </Form.Group>
+          </>
+        )}
+      </Card>
 
-            {/* Entrée du vecteur si Gauss-Seidel est sélectionné */}
-    {algorithm === 'gauss-seidel' && (
-      <Form.Group className="mb-3">
-        <h5 className="text-center">Enter Vector (b)</h5>
-        <Row className="justify-content-center">
-          {[...Array(size)].map((_, i) => (
-            <Col sm="auto" key={i}>
+      {/* Entrée de matrice et vecteur pour méthode "Manually" */}
+      {method === 'manual' && (
+        <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
+          <h5 className="text-center">Enter Matrix (M)</h5>
+          <Form.Group className="mb-3">
+    <div>
+      {[...Array(size)].map((_, i) => (
+        <Row key={i} className="justify-content-center">
+          {[...Array(size)].map((_, j) => (
+            <Col sm="auto" key={j}>
               <Form.Control
                 type="number"
-                placeholder={`b[${i}]`}
-                onChange={(e) => handleVectorChange(i, e.target.value)}
+                placeholder={`[${i}][${j}]`}
+                onChange={(e) => handleMatrixChange(i, j, e.target.value)}
                 className={
-                  size > 8? 'small-input' :
+                  size >8 ? 'small-input' :
                   size >= 6 && size <= 8 ? 'moyenne-input' :
                   'normal-input'
                 }
-                />
-                    </Col>
-                 ))}
-                </Row>
-            </Form.Group>
-             )}
-          </Card>
-        )}
+              />
+            </Col>
+          ))}
+        </Row>
+      ))}
+    </div>
+  </Form.Group>
 
-        {/* Paramètres pour la méthode aléatoire */}
-        {method === 'random' && (
-          <Card className="p-3 mb-4" style={{ borderColor: '#FFD580'  }}>
-            <Form.Group as={Row} className="mb-3 justify-content-center">
-              <Form.Label column sm={3}>Min Element</Form.Label>
-              <Col sm={3}>
-                <Form.Control type="number" value={min} onChange={handleMinChange} />
-              </Col>
-              <Form.Label column sm={3}>Max Element</Form.Label>
-              <Col sm={3}>
-                <Form.Control type="number" value={max} onChange={handleMaxChange} />
-              </Col>
-            </Form.Group>
-          </Card>
-        )}
+          {/* Entrée du vecteur si Gauss-Seidel est sélectionné */}
+  {algorithm === 'gauss-seidel' && (
+    <Form.Group className="mb-3">
+      <h5 className="text-center">Enter Vector (b)</h5>
+      <Row className="justify-content-center">
+        {[...Array(size)].map((_, i) => (
+          <Col sm="auto" key={i}>
+            <Form.Control
+              type="number"
+              placeholder={`b[${i}]`}
+              onChange={(e) => handleVectorChange(i, e.target.value)}
+              className={
+                size > 8? 'small-input' :
+                size >= 6 && size <= 8 ? 'moyenne-input' :
+                'normal-input'
+              }
+              />
+                  </Col>
+               ))}
+              </Row>
+          </Form.Group>
+           )}
+        </Card>
+      )}
 
-        {/* Upload de fichier si la méthode "File" est sélectionnée */}
-        {method === 'file' && (
-          <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
-            <Form.Group className="mb-3">
-              <Form.Label>Upload Matrix File</Form.Label>
-              <Form.Control type="file" onChange={handleFileUpload} />
-            </Form.Group>
-          </Card>
-        )}
+      {/* Paramètres pour la méthode aléatoire */}
+      {method === 'random' && (
+        <Card className="p-3 mb-4" style={{ borderColor: '#FFD580'  }}>
+          <Form.Group as={Row} className="mb-3 justify-content-center">
+            <Form.Label column sm={3}>Min Element</Form.Label>
+            <Col sm={3}>
+              <Form.Control type="number" value={min} onChange={handleMinChange} />
+            </Col>
+            <Form.Label column sm={3}>Max Element</Form.Label>
+            <Col sm={3}>
+              <Form.Control type="number" value={max} onChange={handleMaxChange} />
+            </Col>
+          </Form.Group>
+        </Card>
+      )}
 
-        {/* Boutons d'actions */}
-        <div className="text-center mt-4">
-  {method === 'random' && size > 30 ? (
-    <Button className="btn-download mx-2" onClick={downloadMatrix}>
-      Download Matrix
-    </Button>
-  ) : (
-    <Button className="btn-show-matrix mx-2" onClick={displayMatrix}>
-      Show Matrix
-    </Button>
-  )}
-  <Button className="btn-calculate mx-2" onClick={calculate}>Calculate</Button>
+      {/* Upload de fichier si la méthode "File" est sélectionnée */}
+      {method === 'file' && (
+        <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
+          <Form.Group className="mb-3">
+            <Form.Label>Upload Matrix File</Form.Label>
+            <Form.Control type="file" onChange={handleFileUpload} />
+          </Form.Group>
+        </Card>
+      )}
+
+      {/* Boutons d'actions */}
+      <div className="text-center mt-4">
+{method === 'random' && size > 30 ? (
+  <Button className="btn-download mx-2" onClick={downloadMatrix}>
+    Download Matrix
+  </Button>
+) : (
+  <Button className="btn-show-matrix mx-2" onClick={displayMatrix}>
+    Show Matrix
+  </Button>
+)}
+<Button className="btn-calculate mx-2" onClick={calculate}>Calculate</Button>
 </div>
-         {/* Affichage de la matrice */}
-         {matrixDisplay && (
-          <Card className="p-3 mt-4 text-center" style={{ borderColor: '#FFD580' }}>
-            {matrixDisplay}
-          </Card>
-        )}
-        {calculationDisplay && (
-                <Card className="p-3 mt-4" style={{ borderColor: '#FFD580' }}>
-                    {calculationDisplay}
-                </Card>
-            )}
-      </Card>
-    </Container>
-  );
+       {/* Affichage de la matrice */}
+       {matrixDisplay && (
+        <Card className="p-3 mt-4 text-center" style={{ borderColor: '#FFD580' }}>
+          {matrixDisplay}
+        </Card>
+      )}
+      {calculationDisplay && (
+              <Card className="p-3 mt-4" style={{ borderColor: '#FFD580' }}>
+                  {calculationDisplay}
+              </Card>
+          )}
+    </Card>
+  </Container>
+);
+
 }
 
 export default Seidel;
