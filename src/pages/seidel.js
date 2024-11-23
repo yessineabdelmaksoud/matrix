@@ -203,29 +203,89 @@ const calculate = () => {
             </h5>
           );
           break;
-      case 'gauss-seidel':
-        const { x, iterations, complexity, converged } = gaussSeidel(matrix, vectorB, tolerance, maxIterations);
+          case 'gauss-seidel': {
+            const { x, iterations, complexity, converged } = gaussSeidel(matrix, vectorB, tolerance, maxIterations);
+        
+            // Fonction pour arrondir à 4 décimales
+            const roundTo4Decimals = (value) => Math.round(value * 10000) / 10000;
+        
+            // Préparation des itérations arrondies
+            const roundedIterations = iterations.map((iteration) =>
+                iteration.map(roundTo4Decimals)
+            );
+        
+            // Fonction pour regrouper par 3
+            const groupByThree = (array) => {
+                const groups = [];
+                for (let i = 0; i < array.length; i += 3) {
+                    groups.push(array.slice(i, i + 3));
+                }
+                return groups;
+            };
+        
+            // Grouper les itérations par 3
+            const groupedIterations = groupByThree(roundedIterations);
+        
+            // Préparer les solutions finales
+            const xFractions = x.map((value) => {
+                const fraction = new Fraction(Number(value)); // Convertir explicitement en nombre
+                return formatFraction(fraction);
+            });
+            const xRounded = x.map(roundTo4Decimals);
+        
+            // Afficher le résultat
+            setCalculationDisplay(
+                <div>
+                    {groupedIterations.map((group, groupIndex) => (
+                        <div key={groupIndex} style={{ display: "flex", justifyContent: "space-between" }}>
+                            {group.map((iteration, index) => (
+                                <BlockMath
+                                    key={index}
+                                    math={`\\text{Iteration ${groupIndex * 3 + index + 1}: } x = \\begin{bmatrix} ${iteration.join(" \\\\ ")} \\end{bmatrix}`}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                    {/* Affichage des solutions finales */}
+                    <BlockMath math={`\\text{Solution finale (x): } \\begin{bmatrix} ${x.join(" \\\\ ")} \\end{bmatrix}`} />
+                    <BlockMath math={`\\text{Solution finale en fraction (x): } \\begin{bmatrix} ${xFractions.join(" \\\\ ")} \\end{bmatrix}`} />
+                    <BlockMath math={`\\text{Solution arrondie finale (x): } \\begin{bmatrix} ${xRounded.join(" \\\\ ")} \\end{bmatrix}`} />
+                    <div style={{ textAlign: "center", marginTop: "20px" }}>
+    <p style={{
+        fontSize: "24px",
+        fontWeight: "bold",
+        color: "#2c3e50",
+        textShadow: "2px 2px 5px rgba(0, 0, 0, 0.3)",
+        margin: "10px 0"
+    }}>
+        Iterations: <span >{iterations.length}</span>
+    </p>
+    <p style={{
+        fontSize: "24px",
+        fontWeight: "bold",
+        color: "#e74c3c",
+        textShadow: "2px 2px 5px rgba(0, 0, 0, 0.3)",
+        margin: "10px 0"
+    }}>
+        Complexity: <span>{complexity}</span>
+    </p>
+    <p style={{
+        fontSize: "24px",
+        fontWeight: "bold",
+        color: "#27ae60",
+        textShadow: "2px 2px 5px rgba(0, 0, 0, 0.3)",
+        margin: "10px 0"
+    }}>
+        Converged: <span style={{ color: converged ? "#2ecc71" : "#e74c3c" }}>
+            {converged ? "Yes" : "No"}
+        </span>
+    </p>
+</div>
 
-        const xFractions = x.map((value) => {
-          const fraction = new Fraction(Number(value)); // Convertir explicitement en nombre
-          return formatFraction(fraction);
-        });
-        const xRounded = x.map((value) => roundToTolerance(value, tolerance));
-
-        setCalculationDisplay(
-          <div>
-            {iterations.map((iteration, index) => (
-              <p key={index}>Iteration {index + 1}: x = [{iteration.join(", ")}]</p>
-            ))}
-            <h5>Solution finale (x): {x.join(", ")}</h5>
-            <h5>Solution finale en fraction (x): {xFractions.join(", ")}</h5>
-            <h5>Solution arrondie finale (x): {xRounded.join(", ")}</h5>
-            <p>Iterations: {iterations.length}</p>
-            <p>Complexity: {complexity}</p>
-            <p>Converged: {converged ? "Yes" : "No"}</p>
-          </div>
-        );
-        break;
+                </div>
+            );
+            break;
+        }
       default:
         setCalculationDisplay(<h5>Please select a valid algorithm.</h5>);
     }
@@ -233,6 +293,8 @@ const calculate = () => {
     setCalculationDisplay(<h5>Error: {error.message}</h5>);
   }
 };
+
+
 
 return (
   <Container className="d-flex justify-content-center mt-5" >
