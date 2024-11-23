@@ -25,7 +25,7 @@ function AboutUs() {
         rel="noopener noreferrer"
         className="linkedin-link"
       >
-        Cyrine Marrakchi
+        Sirine Marrakchi
       </a>
     </h5>
   </Col>
