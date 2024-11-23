@@ -320,8 +320,9 @@ return (
             </Form.Control>
           </Col>
         </Form.Group>
-        {algorithm === 'gauss-seidel' && (
-          <>
+        {
+          algorithm === 'gauss-seidel' && method === 'manual' && (
+            <>
             {/* Dropdown for matrix type */}
       <Form.Group as={Row} className="mt-3 justify-content-center">
         <Form.Label column sm={3} className="text-center">Matrix Type</Form.Label>
@@ -355,7 +356,13 @@ return (
             />
           </Col>
         </Form.Group>
-      )}
+      )} 
+      </>
+          )
+        }
+        {algorithm === 'gauss-seidel' && (
+          <>
+            
             <Form.Group as={Row} className="mt-4 justify-content-center">
               <Form.Label column sm={3} className="text-center">Tolerance (10^-q)</Form.Label>
               <Col sm={6}>
