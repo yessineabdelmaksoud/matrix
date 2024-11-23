@@ -1,58 +1,37 @@
+function generateBandSymmetricMatrix(n, bandWidth) {
+  // Initialize an n x n matrix with zeros
+  const matrix = Array.from({ length: n }, () => Array(n).fill(0));
 
-  
-  // Example usage for a symmetric matrix
-  const A = [
-    [4, -1, 0, 0],
-    [-1, 4, -1, 0],
-    [0, -1, 4, -1],
-    [0, 0, -1, 3]
-  ];
-  const b = [15, 10, 10, 10];
-  
-  try {
-    const { solution, iterations } = gaussSeidelSymmetric(A, b);
-    console.log("Solution:", solution);
-    console.log("Iterations:", iterations);
-  } catch (error) {
-    console.error(error.message);
+  for (let i = 0; i < n; i++) {
+      for (let j = Math.max(0, i - bandWidth); j <= Math.min(n - 1, i + bandWidth); j++) {
+          const value = Math.floor(Math.random() * 10) + 1; // Random value between 1 and 10
+          matrix[i][j] = value;
+          matrix[j][i] = value; // Ensure symmetry
+      }
   }
-  
-  {/* Gauss-Seidel specific options */}
-  {algorithm === 'gauss-seidel' && (
-    <>
-      {/* Dropdown for matrix type */}
-      <Form.Group as={Row} className="mt-3 justify-content-center">
-        <Form.Label column sm={3} className="text-center">Matrix Type</Form.Label>
-        <Col sm={6}>
-          <Form.Control
-            as="select"
-            value={matrixSubtype}
-            onChange={(e) => setMatrixSubtype(e.target.value)}
-          >
-            <option value="">Select Type</option>
-            <option value="normal">Normal</option>
-            <option value="lower-triangular">Lower Triangular</option>
-            <option value="upper-triangular">Upper Triangular</option>
-            <option value="symmetric">Symmetric</option>
-            <option value="band-lower-half">Lower Half Band</option>
-            <option value="band-upper-half">Upper Half Band</option>
-            <option value="band">Band</option>
-          </Form.Control>
-        </Col>
-      </Form.Group>
 
-      {/* Band strength input */}
-      {['band-lower-half', 'band-upper-half', 'band'].includes(matrixSubtype) && (
-        <Form.Group as={Row} className="mt-3 justify-content-center">
-          <Form.Label column sm={3} className="text-center">Band Strength (k)</Form.Label>
-          <Col sm={6}>
-            <Form.Control
-              type="number"
-              value={bandStrength || ''}
-              onChange={(e) => setBandStrength(Number(e.target.value))}
-            />
-          </Col>
-        </Form.Group>
-      )}
-    </>
-  )}
+  return matrix;
+}
+
+function generateSymmetricMatrix(n) {
+  // Initialize an n x n matrix with zeros
+  const matrix = Array.from({ length: n }, () => Array(n).fill(0));
+
+  // Fill the upper triangle and diagonal
+  for (let i = 0; i < n; i++) {
+      for (let j = i; j < n; j++) {
+          const value = Math.floor(Math.random() * 10) + 1; // Random value between 1 and 10
+          matrix[i][j] = value;
+          matrix[j][i] = value; // Ensure symmetry
+      }
+  }
+
+  return matrix;
+}
+
+// Example Usage
+const n = 4; // Size of the matrix
+const symmetricMatrix = generateSymmetricMatrix(n);
+
+// Display the matrix
+console.log(symmetricMatrix);
