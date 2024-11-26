@@ -485,7 +485,7 @@ export function generateRandomHollowMatrix(n, min, max) {
   
     return matrix;
   }
-export function generateLowerTriangularDiagonalDominantMatrix(n) {
+export function generateLowerTriangularDiagonalDominantMatrix(n, min, max) {
     // Initialize the matrix as a lower triangular matrix with random values
     let matrix = Array.from({ length: n }, () => Array(n).fill(0));
   
@@ -506,7 +506,7 @@ export function generateLowerTriangularDiagonalDominantMatrix(n) {
     return matrix;
   }
   
-export function generateUpperTriangularDiagonalDominantMatrix(n) {
+export function generateUpperTriangularDiagonalDominantMatrix(n,min, max) {
     // Initialize the matrix as an upper triangular matrix with random values
     let matrix = Array.from({ length: n }, () => Array(n).fill(0));
   
@@ -527,7 +527,7 @@ export function generateUpperTriangularDiagonalDominantMatrix(n) {
     return matrix;
   }
   
-export function generateLowerHalfBandDiagonalDominantMatrix(n, bandwidth) {
+export function generateLowerHalfBandDiagonalDominantMatrix(n, bandwidth, min, max) {
     // Initialize the matrix with zeros
     let matrix = Array.from({ length: n }, () => Array(n).fill(0));
   
