@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Card, FormGroup } from 'react-bootstrap';
 import { transpose, determinant, inverseMatrix, estDefiniePositive, gaussSeidel,estDiagonaleDominante } from '../Algorithms/Algorithm';
 import './seidel.css';
 import { generateMatrixByType } from '../Algorithms/typematrice';

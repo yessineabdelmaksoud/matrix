@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Seidel from './pages/seidel'; 
 import AboutUs from './pages/AboutUs';
 
+
 function App() {
   const location = useLocation();
 
