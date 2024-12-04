@@ -7,6 +7,10 @@ function buttons({ method, size, handleDownloadMatrix, displayMatrix, calculate 
         calculate();
         window.scrollTo({ top: document.body.scrollHeight / 2, behavior: 'smooth' });
     };
+    const handleShowMatrixClick = () => {
+        displayMatrix();
+        window.scrollTo({ top: document.body.scrollHeight / 2, behavior: 'smooth' });
+    }
 
     return (
         <div className="text-center mt-4">
@@ -15,7 +19,7 @@ function buttons({ method, size, handleDownloadMatrix, displayMatrix, calculate 
                     Download Matrix
                 </Button>
             ) : (
-                <Button className="btn-show-matrix mx-2" onClick={displayMatrix}>
+                <Button className="btn-show-matrix mx-2" onClick={handleShowMatrixClick}>
                     Show Matrix
                 </Button>
             )}
