@@ -1,4 +1,5 @@
 // src/App.js
+// hahla
 import React from 'react';
 import CustomNavbar from './navbar';
 import Home from './home';
