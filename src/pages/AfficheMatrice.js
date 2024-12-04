@@ -5,7 +5,7 @@ import { BlockMath } from 'react-katex';
 const AfficheMatrice = ({ matrix, vectorB, algorithm }) => {
     // Fonction pour rendre l'affichage de la matrice et du vecteur
     const renderMatrixDisplay = (matrix, vectorB) => (
-        <div>
+        <div id="matrix-display">
             <h5>Matrix (M):</h5>
             <BlockMath>
                 {`\\begin{bmatrix}

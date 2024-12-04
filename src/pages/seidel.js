@@ -116,7 +116,7 @@ const onFileChange = (event) => {
 return (
   <Container className="d-flex justify-content-center mt-5" >
     <Card className="aa" style={{ width: '80%', padding: '20px', borderColor: '#FFD580'}}>
-     <br/>
+    <br/>
       <h2 className="text-center">Gauss-Seidel Calculator</h2>
       {/* Section pour choisir la méthode d'entrée */}
     <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
