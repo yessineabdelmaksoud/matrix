@@ -13,6 +13,12 @@ import Calculate from './CalculateAffiche.js';
 import downloadMatrix from './DownloadMatrixRandom.js';
 import handleFileUpload from './upload.js'
 
+const renderMatrixDisplay = (matrix, vectorB) => {
+  return (
+    <AfficheMatrice matrix={matrix} vectorB={vectorB} algorithm={algorithm} />
+  );
+};
+
 function Seidel() {
   const [method, setMethod] = useState('manual');
   const [algorithm, setAlgorithm] = useState('gauss-seidel');
@@ -99,7 +105,7 @@ const onFileChange = (event) => {
   handleFileUpload(event, size, setMatrix, setVectorB, algorithm);
 };
   
-  const calculate = Calculate({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay});
+  const calculate = Calculate({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay,renderMatrixDisplay});
   const handleDownloadMatrix = () => {
     downloadMatrix(method, size, matrixType, 'gauss-seidel', setMatrix, setVectorB, min, max);
     console.log("Download Matrix clicked");
