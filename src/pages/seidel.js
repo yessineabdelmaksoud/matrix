@@ -13,11 +13,7 @@ import Calculate from './CalculateAffiche.js';
 import downloadMatrix from './DownloadMatrixRandom.js';
 import handleFileUpload from './upload.js'
 
-const renderMatrixDisplay = (matrix, vectorB) => {
-  return (
-    <AfficheMatrice matrix={matrix} vectorB={vectorB} algorithm={algorithm} />
-  );
-};
+
 
 function Seidel() {
   const [method, setMethod] = useState('manual');
@@ -34,7 +30,12 @@ function Seidel() {
   const [maxIterations, setMaxIterations] = useState(1000000);
   const [bandStrength_p, setBandStrength_p] = useState(0);
   const [bandStrength_q, setBandStrength_q] = useState(0);
-
+  
+  const renderMatrixDisplay = (matrix, vectorB) => {
+    return (
+      <AfficheMatrice matrix={matrix} vectorB={vectorB} algorithm={algorithm} />
+    );
+  };
   const handleMethodChange = (event) => {
     setMethod(event.target.value);
   };
