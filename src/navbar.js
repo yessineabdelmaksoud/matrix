@@ -4,13 +4,17 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './navbar.css';
 
-function CustomNavbar() {
+function CustomNavbar({ user, setUser }) {
   const navigate = useNavigate();
 
   const handleAlgorithmChange = (eventKey) => {
     if (eventKey) {
       navigate(eventKey);
     } 
+  };
+  const handleLogout = () => {
+    setUser(null); // Déconnecter l'utilisateur
+    navigate('/'); // Rediriger vers la page d'accueil
   };
 
   return (
@@ -41,7 +45,19 @@ function CustomNavbar() {
             </NavDropdown>
           </Nav>
           <Nav className="ml-auto">
-            <Nav.Link href="#" className="signup-link">Sign up</Nav.Link>
+          <Nav className="ml-auto">
+            {user ? (
+              <>
+                <Nav.Link className="username">{user.username}</Nav.Link>
+                <Nav.Link onClick={handleLogout}>Log Out</Nav.Link>
+              </>
+            ) : (
+              <>
+                <Nav.Link className="signup-link" onClick={() => navigate('/signup')}>Sign up</Nav.Link>
+                <Nav.Link className="login-link" onClick={() => navigate('/login')}>Login</Nav.Link>
+              </>
+            )}
+          </Nav>
           </Nav>
         </Navbar.Collapse>
       </Container>
