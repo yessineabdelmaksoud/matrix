@@ -226,6 +226,8 @@ return (
                 algorithm={algorithm} 
                 matrixType={matrixType}
                 matrix = {matrix}
+                bandStrength_p = {bandStrength_p}
+                bandStrength_q = {bandStrength_q}
                 handleMatrixChange={handleMatrixChange} 
                 handleVectorChange={handleVectorChange} 
           />
