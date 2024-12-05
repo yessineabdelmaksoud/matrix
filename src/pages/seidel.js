@@ -42,6 +42,8 @@ function Seidel() {
 
   const handleAlgorithmChange = (event) => {
     setAlgorithm(event.target.value);
+    setMatrixType('');
+    setMatrix(Array(size).fill().map(() => Array(size).fill(0)));
   };
 
   const handleMinChange = (event) => {
@@ -76,12 +78,12 @@ function Seidel() {
     setVectorB(Array(newSize).fill(0));
   };
 
-  const handleMatrixChange = (row, col, value) => {
-    const updatedMatrix = matrix.map((r, i) =>
-      i === row ? r.map((val, j) => (j === col ? parseFloat(value) : val)) : r
-    );
-    setMatrix(updatedMatrix);
-  };
+  const handleMatrixChange = (i, j, value) => {
+    const updatedMatrix = [...matrix];
+    updatedMatrix[i][j] = value;
+    setMatrix(updatedMatrix); // Assuming you're using state like useState
+};
+
   const handleVectorChange = (index, value) => {
     const updatedVectorB = vectorB.map((val, i) => (i === index ? parseFloat(value) : val));
     setVectorB(updatedVectorB);
@@ -155,6 +157,24 @@ return (
       </Col>
     </Row>
   </Card>
+  {method === 'manual' && (
+        <Seidelmanual 
+          size={size} 
+          handleSizeChange={handleSizeChange} 
+          matrixType={matrixType}
+          handleMatrixTypeChange={handleMatrixTypeChange}
+          algorithm={algorithm}
+          handleAlgorithmChange={handleAlgorithmChange}
+          setBandStrength_q={setBandStrength_q}
+          setBandStrength_p={setBandStrength_p}
+          bandStrength_p={bandStrength_p}
+          bandStrength_q={bandStrength_q}
+          tolerance={tolerance}
+          handleToleranceChange={handleToleranceChange}
+          maxIterations={maxIterations}
+          handleMaxIterationsChange={handleMaxIterationsChange}
+        />
+      )}
   {method === 'random' && (
         <SeidelRandom 
         size={size} 
@@ -175,24 +195,6 @@ return (
         handleToleranceChange={handleToleranceChange}
         maxIterations={maxIterations}
         handleMaxIterationsChange={handleMaxIterationsChange}
-        />
-      )}
-    {method === 'manual' && (
-        <Seidelmanual 
-          size={size} 
-          handleSizeChange={handleSizeChange} 
-          matrixType={matrixType}
-          handleMatrixTypeChange={handleMatrixTypeChange}
-          algorithm={algorithm}
-          handleAlgorithmChange={handleAlgorithmChange}
-          setBandStrength_q={setBandStrength_q}
-          setBandStrength_p={setBandStrength_p}
-          bandStrength_p={bandStrength_p}
-          bandStrength_q={bandStrength_q}
-          tolerance={tolerance}
-          handleToleranceChange={handleToleranceChange}
-          maxIterations={maxIterations}
-          handleMaxIterationsChange={handleMaxIterationsChange}
         />
       )}
       {method === 'file' && (
@@ -222,6 +224,8 @@ return (
                 method={method} 
                 size={size} 
                 algorithm={algorithm} 
+                matrixType={matrixType}
+                matrix = {matrix}
                 handleMatrixChange={handleMatrixChange} 
                 handleVectorChange={handleVectorChange} 
           />
