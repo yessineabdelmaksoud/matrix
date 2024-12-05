@@ -1,11 +1,11 @@
-// src/pages/InputMatrice.js
 import React from 'react';
 import { Card, Form, Row, Col } from 'react-bootstrap';
 
-function InputMatrice({ method, size, algorithm, handleMatrixChange, handleVectorChange }) {
+function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrixChange, handleVectorChange, bandStrength_p, bandStrength_q }) {
+    
+
     return (
         <>
-            {/* Entrée de matrice et vecteur pour méthode "Manually" */}
             {method === 'manual' && (
                 <Card className="p-3 mb-4" style={{ borderColor: '#FFD580' }}>
                     <h5 className="text-center">Enter Matrix (M)</h5>
@@ -18,13 +18,21 @@ function InputMatrice({ method, size, algorithm, handleMatrixChange, handleVecto
                                             <Form.Control
                                                 type="number"
                                                 placeholder={`[${i}][${j}]`}
-                                                onChange={(e) => handleMatrixChange(i, j, e.target.value)}
+                                                value={matrixType === 'symmetric' && i < j && matrix[i][j] ? matrix[j][i] : null}
+                                                onChange={(e) => {
+                                                    handleMatrixChange(i, j, e.target.value);
+                                                    if (matrixType === 'symmetric' && i !== j) {
+                                                        handleMatrixChange(j, i, e.target.value); // Sync symmetric cell
+                                                    }
+                                                }}
+                                                disabled={((matrixType === 'symmetric' || algorithm === 'resolutin-inf') && i < j) || (algorithm === 'resolutin-sup' && i > j ) || (matrixType === 'band' && ((i - j) > bandStrength_q || (j - i) > bandStrength_p))} // Disable lower triangle
                                                 className={
                                                     size > 8 ? 'small-input' :
                                                     size >= 6 && size <= 8 ? 'moyenne-input' :
                                                     'normal-input'
                                                 }
                                             />
+
                                         </Col>
                                     ))}
                                 </Row>
@@ -32,7 +40,6 @@ function InputMatrice({ method, size, algorithm, handleMatrixChange, handleVecto
                         </div>
                     </Form.Group>
 
-                    {/* Entrée du vecteur si Gauss-Seidel est sélectionné */}
                     {algorithm === 'gauss-seidel' && (
                         <Form.Group className="mb-3">
                             <h5 className="text-center">Enter Vector (b)</h5>
