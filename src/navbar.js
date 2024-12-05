@@ -1,22 +1,40 @@
-import React from 'react';
+// src/navbar.js
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './navbar.css';
+import axios from 'axios';
 
-function CustomNavbar() {
+function CustomNavbar({ user, setUser }) {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/user')
+      .then(response => setUser(response.data))
+      .catch(error => setUser(null));
+  }, [setUser]);
 
   const handleAlgorithmChange = (eventKey) => {
     if (eventKey) {
       navigate(eventKey);
-    } 
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.get('http://localhost:5000/logout');
+      setUser(null);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
     <Navbar expand="lg" bg="light" variant="light" fixed="top">
       <Container>
-        <Navbar.Brand href="#"> 
+        <Navbar.Brand href="#">
           <img
             src="/logo.png"
             width="180"
@@ -27,7 +45,7 @@ function CustomNavbar() {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mx-auto"> 
+          <Nav className="mx-auto">
             <Nav.Link onClick={() => navigate('/')}>Home</Nav.Link>
             <Nav.Link>Historique</Nav.Link>
             <Nav.Link onClick={() => navigate('/about-us')}>About Us</Nav.Link>
@@ -41,7 +59,17 @@ function CustomNavbar() {
             </NavDropdown>
           </Nav>
           <Nav className="ml-auto">
-            <Nav.Link href="#" className="signup-link">Sign up</Nav.Link>
+            {user ? (
+              <>
+                <Nav.Link className="username">{user.username}</Nav.Link>
+                <Nav.Link onClick={handleLogout}>Log Out</Nav.Link>
+              </>
+            ) : (
+              <>
+                <Nav.Link className="signup-link" onClick={() => navigate('/signup')}>Sign up</Nav.Link>
+                <Nav.Link className="login-link" onClick={() => navigate('/login')}>Login</Nav.Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -50,7 +78,3 @@ function CustomNavbar() {
 }
 
 export default CustomNavbar;
-
-
-
-    
