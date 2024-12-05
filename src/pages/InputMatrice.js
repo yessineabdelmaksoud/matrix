@@ -18,7 +18,7 @@ function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrix
                                             <Form.Control
                                                 type="number"
                                                 placeholder={`[${i}][${j}]`}
-                                                value={matrixType === 'symmetric' && i < j && matrix[i][j] ? matrix[j][i] : null}
+                                                value={matrixType === 'symmetric' && i < j && matrix[i][j] ? matrix[j][i] : algorithm ==='resolutin-inf' && i < j ? 0 : algorithm === 'resolutin-sup' && i > j ? 0 : null}
                                                 onChange={(e) => {
                                                     handleMatrixChange(i, j, e.target.value);
                                                     if (matrixType === 'symmetric' && i !== j) {
@@ -40,7 +40,6 @@ function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrix
                         </div>
                     </Form.Group>
 
-                    {algorithm === 'gauss-seidel' && (
                         <Form.Group className="mb-3">
                             <h5 className="text-center">Enter Vector (b)</h5>
                             <Row className="justify-content-center">
@@ -60,7 +59,6 @@ function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrix
                                 ))}
                             </Row>
                         </Form.Group>
-                    )}
                 </Card>
             )}
         </>

@@ -12,7 +12,6 @@ const AfficheMatrice = ({ matrix, vectorB, algorithm }) => {
                     ${matrix.map(row => row.join(' & ')).join(' \\\\ ')}
                 \\end{bmatrix}`}
             </BlockMath>
-            {algorithm === 'gauss-seidel' && (
                 <>
                     <h5>Vector (b):</h5>
                     <BlockMath>
@@ -21,7 +20,6 @@ const AfficheMatrice = ({ matrix, vectorB, algorithm }) => {
                         \\end{bmatrix}`}
                     </BlockMath>
                 </>
-            )}
         </div>
     );
 

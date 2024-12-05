@@ -73,7 +73,7 @@ function Seidelmanual({size,handleSizeChange,matrixType,handleMatrixTypeChange,a
         </Form.Group>
     </Card>
   )}
-    <Card className="p-3 mb-4" style={{ borderColor: '#FFD580'  }}>
+    {algorithm === 'gauss-seidel' && (<Card className="p-3 mb-4" style={{ borderColor: '#FFD580'  }}>
       <Form.Group as={Row} className="mt-4 justify-content-center">
               <Form.Label column sm={3} className="text-center">Tolerance (10^-q)</Form.Label>
               <Col sm={6}>
@@ -87,6 +87,7 @@ function Seidelmanual({size,handleSizeChange,matrixType,handleMatrixTypeChange,a
               </Col>
         </Form.Group>
     </Card>
+    )}
     </div>
     );  
 }

@@ -9,6 +9,8 @@ import {
     estDefiniePositive,
     gaussSeidel,
     estDiagonaleDominante,
+    solveLowerTriangularMatrix,
+    solveUpperTriangularMatrix
 } from '../Algorithms/Algorithm'; // Assurez-vous que le chemin est correct
 
 
@@ -16,7 +18,7 @@ const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCa
     const calculate = () => {
         try {
             let result;
-
+            
             switch (algorithm) {
                 case 'transpose':
                     result = transpose(matrix);
@@ -121,6 +123,24 @@ const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCa
                                     </span>
                                 </p>
                             </div>
+                        </div>
+                    );
+                    break;
+                }
+                case 'resolutin-inf' : {
+                    const {x} = solveLowerTriangularMatrix(matrix, vectorB);
+                    setCalculationDisplay(
+                        <div>
+                            <BlockMath math={`\\text{Solution finale (x): } \\begin{bmatrix} ${x.join(" \\\\ ")} \\end{bmatrix}`} />
+                        </div>
+                    );
+                    break;
+                }
+                case 'resolutin-sup':{
+                    const {x} = solveUpperTriangularMatrix(matrix, vectorB);
+                    setCalculationDisplay(
+                        <div>
+                            <BlockMath math={`\\text{Solution finale (x): } \\begin{bmatrix} ${x.join(" \\\\ ")} \\end{bmatrix}`} />
                         </div>
                     );
                     break;
