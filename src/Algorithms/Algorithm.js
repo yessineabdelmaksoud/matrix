@@ -71,7 +71,7 @@ export const matriceIteration = (A) => {
 };
 
 export const addMatrices = (A, B) => {
-//   const n = A.length;
+  const n = A.length;
   return A.map((row, i) => row.map((val, j) => val + B[i][j]));
 };
 
@@ -390,39 +390,6 @@ export function gaussSeidelLowerHalfBand(A, b, bandwidth, tolerance = 1e-10, max
   }
 
   throw new Error("Gauss-Seidel did not converge within the maximum number of iterations");
-}
-
-export function solveLowerTriangularMatrix(A, b) {
-    const n = b.length;
-    const x = new Array(n).fill(0);
-
-    // Forward substitution
-    for (let i = 0; i < n; i++) {
-        let sum = 0;
-        for (let j = 0; j < i; j++) {
-            sum += A[i][j] * x[j];
-        }
-        x[i] = (b[i] - sum) / A[i][i];
-    }
-
-    return {x};
-}
-export function solveUpperTriangularMatrix(A, b) {
-    const n = b.length;
-    const x = new Array(n).fill(0);
-
-    // Backward substitution
-    for (let i = n - 1; i >= 0; i--) {
-        let sum = 0;
-        // Sum the known terms on the right side of the equation
-        for (let j = i + 1; j < n; j++) {
-            sum += A[i][j] * x[j];
-        }
-        // Solve for x[i]
-        x[i] = (b[i] - sum) / A[i][i];
-    }
-
-    return {x};
 }
 
 

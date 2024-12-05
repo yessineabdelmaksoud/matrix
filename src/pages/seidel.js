@@ -43,20 +43,7 @@ function Seidel() {
   const handleAlgorithmChange = (event) => {
     setAlgorithm(event.target.value);
     setMatrixType('');
-    if(event.target.value === 'resolutin-inf'){
-      for(let i = 0; i < size; i++) {
-        for(let j = i+1; j < size; j++){
-            handleMatrixChange(i, j, 0);
-        }
-      }
-    }
-    else if(event.target.value === 'resolutin-sup'){
-      for(let i = 0; i < size; i++) {
-        for(let j = 0; j < i; j++){
-            handleMatrixChange(i, j, 0);
-        }
-      }
-    }
+    setMatrix(Array(size).fill().map(() => Array(size).fill(0)));
   };
 
   const handleMinChange = (event) => {
@@ -250,7 +237,7 @@ return (
                 size={size} 
                 handleDownloadMatrix={handleDownloadMatrix} 
                 displayMatrix={displayMatrix} 
-                calculate={calculate}
+                calculate={calculate} 
             />
       {/* Affichage de la matrice */}
       {matrixDisplay && (
