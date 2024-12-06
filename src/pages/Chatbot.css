@@ -1,0 +1,46 @@
+.user-message {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px 0;
+    text-align: right;
+  }
+  
+  .bot-message {
+    background-color: #fffbf0;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px 0;
+    text-align: left;
+  }
+  
+  .user-message strong, .bot-message strong {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .user-message {
+    animation: fadeIn 0.5s;
+  }
+  
+  .bot-message {
+    animation: fadeIn 0.5s;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .bot-message pre {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+  }
+  

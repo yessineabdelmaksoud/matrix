@@ -47,8 +47,9 @@ function CustomNavbar({ user, setUser }) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
             <Nav.Link onClick={() => navigate('/')}>Home</Nav.Link>
-            <Nav.Link>Historique</Nav.Link>
+            <Nav.Link onClick={() => navigate('/historique')}>Historique</Nav.Link>
             <Nav.Link onClick={() => navigate('/about-us')}>About Us</Nav.Link>
+            <Nav.Link onClick={() => navigate('/userguide')}>user guide</Nav.Link>
             <NavDropdown title="Type Algo" onSelect={handleAlgorithmChange}>
               <NavDropdown.Item eventKey="/decomposition-lu">Décomposition LU</NavDropdown.Item>
               <NavDropdown.Item eventKey="/cholesky">Cholesky</NavDropdown.Item>
@@ -67,7 +68,7 @@ function CustomNavbar({ user, setUser }) {
             ) : (
               <>
                 <Nav.Link className="signup-link" onClick={() => navigate('/signup')}>Sign up</Nav.Link>
-                <Nav.Link className="login-link" onClick={() => navigate('/login')}>Login</Nav.Link>
+                <Nav.Link className="signup-link" onClick={() => navigate('/login')}>Login</Nav.Link>
               </>
             )}
           </Nav>
