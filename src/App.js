@@ -8,6 +8,8 @@ import Seidel from './pages/seidel';
 import AboutUs from './pages/AboutUs';
 import SignUp from './connection/SignUp';
 import Login from './connection/Login';
+import Historique from './connection/Historique';
+import Userguide from './pages/userguide';
 
 function App() {
   const location = useLocation();
@@ -24,6 +26,8 @@ function App() {
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/historique" element={<Historique />} />
+        <Route path="/userguide" element={<Userguide />} />
       </Routes>
       {showFooter && <Footer />}
     </>

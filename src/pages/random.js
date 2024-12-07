@@ -25,9 +25,9 @@ function SeidelRandom({size,handleSizeChange,matrixType,handleMatrixTypeChange,a
               <option value="inverse">Inverse</option>
               <option value="positive-definite">verify Positive Definite</option>
               <option value="estDiagonaleDominante">verify Diagonale Dominante</option>
-              <option value="resolutin-inf">resolution matrice tringulaire inferieur</option>
-              <option value="resolutin-sup">resolution matrice tringulaire superieur</option>
-              <option value="gauss-seidel">algorithm Gauss-Seidel</option>
+              <option value="resolutin-inf">resolution lower tringular matrix</option>
+              <option value="resolutin-sup">resolution upper triangular matrix</option>
+              <option value="gauss-seidel">solving linear systems with seidole gauss algorithm</option>
             </Form.Control>
           </Col>
         </Form.Group>
