@@ -48,6 +48,7 @@ function Seidel() {
     setAlgorithm(event.target.value);
     setMatrixType('');
     if(event.target.value === 'resolutin-inf'){
+      setMatrixType('triangular-lower');
       for(let i = 0; i < size; i++) {
         for(let j = i+1; j < size; j++){
             handleMatrixChange(i, j, 0);
@@ -55,6 +56,7 @@ function Seidel() {
       }
     }
     else if(event.target.value === 'resolutin-sup'){
+      setMatrixType('triangular-upper');
       for(let i = 0; i < size; i++) {
         for(let j = 0; j < i; j++){
             handleMatrixChange(i, j, 0);

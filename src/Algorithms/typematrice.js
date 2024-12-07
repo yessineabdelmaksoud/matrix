@@ -1,7 +1,7 @@
 
 export const generateMatrixByType = (size, matrixType, min, max, algorithm) => {
     let newMatrix = Array.from({ length: size }, () => Array(size).fill(0));
-  
+    console.log(matrixType);
     switch (matrixType) {
         case 'triangular-lower':
         for (let i = 0; i < size; i++) {
@@ -107,14 +107,7 @@ export const generateMatrixByType = (size, matrixType, min, max, algorithm) => {
           Array.from({ length: size }, () => Math.floor(Math.random() * (max - min + 1)) + min)
         );
     }
-    if (algorithm === 'gauss-seidel') {
-  
     const newVectorB = Array.from({ length: size }, () => Math.floor(Math.random() * (max - min + 1)) + min);
     return { matrix: newMatrix, vectorB: newVectorB };
-    }
-    else{
-        return { matrix: newMatrix};
-    }
-
   };
   
