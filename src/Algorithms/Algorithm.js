@@ -71,7 +71,7 @@ export const matriceIteration = (A) => {
 };
 
 export const addMatrices = (A, B) => {
-  const n = A.length;
+//   const n = A.length;
   return A.map((row, i) => row.map((val, j) => val + B[i][j]));
 };
 
@@ -190,99 +190,52 @@ export const gaussSeidel = (A, b, tolerance, maxIterations ) => {
   throw new Error("La méthode de Gauss-Seidel n'a pas convergé dans le nombre maximal d'itérations.");
 };
 
-export function gaussSeidelLowerTriangular(A, b, tolerance = 1e-10, maxIterations = 1000) {
-  const n = A.length; // Number of rows
-  let x = new Array(n).fill(0); // Initialize x with zeros
-  let xOld = new Array(n);
-  let iterations = 0;
 
-  while (iterations < maxIterations) {
-      xOld = [...x]; // Save the current values of x
-      for (let i = 0; i < n; i++) {
-          let sum = 0;
-          for (let j = 0; j < i; j++) {
-              sum += A[i][j] * x[j]; // Only sum for the lower triangular part
-          }
-          x[i] = (b[i] - sum) / A[i][i]; // Update x[i]
-      }
-
-      // Check for convergence
-      let maxDiff = 0;
-      for (let i = 0; i < n; i++) {
-          maxDiff = Math.max(maxDiff, Math.abs(x[i] - xOld[i]));
-      }
-      if (maxDiff < tolerance) {
-          return { solution: x, iterations };
-      }
-      iterations++;
-  }
-
-  throw new Error("Gauss-Seidel did not converge within the maximum number of iterations");
-}
-
-export function gaussSeidelUpperTriangular(A, b, tolerance = 1e-10, maxIterations = 1000) {
-  const n = A.length; // Number of rows
-  let x = new Array(n).fill(0); // Initialize x with zeros
-  let xOld = new Array(n);
-  let iterations = 0;
-
-  while (iterations < maxIterations) {
-      xOld = [...x]; // Save the current values of x
-      for (let i = n - 1; i >= 0; i--) { // Iterate in reverse order for upper triangular
-          let sum = 0;
-          for (let j = i + 1; j < n; j++) {
-              sum += A[i][j] * x[j]; // Only sum for the upper triangular part
-          }
-          x[i] = (b[i] - sum) / A[i][i]; // Update x[i]
-      }
-
-      // Check for convergence
-      let maxDiff = 0;
-      for (let i = 0; i < n; i++) {
-          maxDiff = Math.max(maxDiff, Math.abs(x[i] - xOld[i]));
-      }
-      if (maxDiff < tolerance) {
-          return { solution: x, iterations };
-      }
-      iterations++;
-  }
-
-  throw new Error("Gauss-Seidel did not converge within the maximum number of iterations");
-}
-
-export function gaussSeidelSymmetric(A, b, tolerance = 1e-10, maxIterations = 1000) {
-  const n = A.length; // Number of rows
-  let x = new Array(n).fill(0); // Initialize x with zeros
-  let xOld = new Array(n);
-  let iterations = 0;
-
-  while (iterations < maxIterations) {
-      xOld = [...x]; // Save the current values of x
-      for (let i = 0; i < n; i++) {
-          let sum = 0;
-          // Sum the contributions from both the lower and upper parts of the symmetric matrix
-          for (let j = 0; j < i; j++) {
-              sum += A[i][j] * x[j]; // Lower triangular part (already updated in previous iterations)
-          }
-          for (let j = i + 1; j < n; j++) {
-              sum += A[j][i] * x[j]; // Upper triangular part (updated in the current iteration)
-          }
-          x[i] = (b[i] - sum) / A[i][i]; // Update x[i]
-      }
-
-      // Check for convergence
-      let maxDiff = 0;
-      for (let i = 0; i < n; i++) {
-          maxDiff = Math.max(maxDiff, Math.abs(x[i] - xOld[i]));
-      }
-      if (maxDiff < tolerance) {
-          return { solution: x, iterations };
-      }
-      iterations++;
-  }
-
-  throw new Error("Gauss-Seidel did not converge within the maximum number of iterations");
-}
+export const gaussSeidelSymmetric = (A, b, tolerance, maxIterations ) => {
+    const n = A.length;
+  
+    // Vérification des conditions de convergence
+  
+    if (!estRayonSpectralInferieurAUn(A)) {
+      throw new Error("Le rayon spectral de la matrice d'itération est supérieur à 1. La méthode de Gauss-Seidel pourrait ne pas converger.");
+    }
+  
+    let x = Array(n).fill(0); // Initialisation du vecteur solution avec des zéros.
+    let totalOperations = 0; // Compteur pour les opérations arithmétiques.
+    let iterations = []; // Tableau pour stocker les valeurs de x à chaque itération.
+  
+    for (let k = 0; k < maxIterations; k++) {
+        let maxDifference = 0; // Différence maximale pour vérifier la convergence.
+  
+        for (let i = 0; i < n; i++) {
+            let sum = b[i]; // Commencer avec le terme indépendant b[i].
+  
+            for (let j = 0; j < i; j++) {
+                if (j !== i) { // Ajouter les contributions des autres termes sauf x[i].
+                    sum -= A[i][j] * x[j];
+                    totalOperations++; // Incrémenter le compteur d'opérations.
+                }
+            }
+            for(let j = i+1; j < n; j++) {
+                    sum -= A[j][i] * x[j];
+                    totalOperations++;
+            }
+  
+            const newX = sum / A[i][i]; // Calculer la nouvelle valeur pour x[i].
+            maxDifference = Math.max(maxDifference, Math.abs(newX - x[i])); // Mettre à jour la différence maximale.
+            x[i] = newX; // Mettre à jour x[i].
+            totalOperations++; // Incrémenter le compteur d'opérations.
+        }
+  
+        iterations.push([...x]); // Stocker la copie actuelle de x.
+  
+        if (maxDifference < tolerance) { // Si la convergence est atteinte, retourner la solution.
+            return { x, iterations, converged: true, complexity: totalOperations*2 };
+        }
+    }
+  
+    throw new Error("La méthode de Gauss-Seidel n'a pas convergé dans le nombre maximal d'itérations.");
+};
 
 export function gaussSeidelBandMatrix(A, b, bandwidth, tolerance = 1e-10, maxIterations = 1000) {
   const n = A.length; // Number of rows
@@ -393,4 +346,36 @@ export function gaussSeidelLowerHalfBand(A, b, bandwidth, tolerance = 1e-10, max
 }
 
 
+export function solveLowerTriangularMatrix(A, b) {
+    const n = b.length;
+    const x = new Array(n).fill(0);
+
+    // Forward substitution
+    for (let i = 0; i < n; i++) {
+        let sum = 0;
+        for (let j = 0; j < i; j++) {
+            sum += A[i][j] * x[j];
+        }
+        x[i] = (b[i] - sum) / A[i][i];
+    }
+
+    return {x};
+}
+export function solveUpperTriangularMatrix(A, b) {
+    const n = b.length;
+    const x = new Array(n).fill(0);
+
+    // Backward substitution
+    for (let i = n - 1; i >= 0; i--) {
+        let sum = 0;
+        // Sum the known terms on the right side of the equation
+        for (let j = i + 1; j < n; j++) {
+            sum += A[i][j] * x[j];
+        }
+        // Solve for x[i]
+        x[i] = (b[i] - sum) / A[i][i];
+    }
+
+    return {x};
+}
   

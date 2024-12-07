@@ -43,7 +43,20 @@ function Seidel() {
   const handleAlgorithmChange = (event) => {
     setAlgorithm(event.target.value);
     setMatrixType('');
-    setMatrix(Array(size).fill().map(() => Array(size).fill(0)));
+    if(event.target.value === 'resolutin-inf'){
+      for(let i = 0; i < size; i++) {
+        for(let j = i+1; j < size; j++){
+            handleMatrixChange(i, j, 0);
+        }
+      }
+    }
+    else if(event.target.value === 'resolutin-sup'){
+      for(let i = 0; i < size; i++) {
+        for(let j = 0; j < i; j++){
+            handleMatrixChange(i, j, 0);
+        }
+      }
+    }
   };
 
   const handleMinChange = (event) => {
@@ -56,6 +69,15 @@ function Seidel() {
 
   const handleMatrixTypeChange = (event) => {
     setMatrixType(event.target.value);
+    if(event.target.value ==='band'){
+      for(let i = 0; i < size; i++) {
+        for(let j = 0; j < size; j++){
+            if((i-j > bandStrength_p) || (j - i >bandStrength_q)){
+              handleMatrixChange(i, j, 0);
+            }
+        }
+      }
+    }
   };
 
   const handleToleranceChange = (event) => {
@@ -108,7 +130,7 @@ const onFileChange = (event) => {
   handleFileUpload(event, size, setMatrix, setVectorB, algorithm);
 };
   
-  const calculate = Calculate({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay,renderMatrixDisplay});
+  const calculate = Calculate({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay,renderMatrixDisplay, matrixType});
   const handleDownloadMatrix = () => {
     downloadMatrix(method, size, matrixType, 'gauss-seidel', setMatrix, setVectorB, min, max);
     console.log("Download Matrix clicked");

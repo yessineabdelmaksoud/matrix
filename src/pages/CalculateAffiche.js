@@ -9,10 +9,13 @@ import {
     estDefiniePositive,
     gaussSeidel,
     estDiagonaleDominante,
+    solveLowerTriangularMatrix,
+    solveUpperTriangularMatrix,
+    gaussSeidelSymmetric
 } from '../Algorithms/Algorithm'; // Assurez-vous que le chemin est correct
 
 
-const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay, renderMatrixDisplay}) => {
+const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay, renderMatrixDisplay, matrixType}) => {
     const calculate = () => {
         try {
             let result;
@@ -47,7 +50,7 @@ const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCa
                     );
                     break;
                 case 'gauss-seidel': {
-                    const { x, iterations, complexity, converged } = gaussSeidel(matrix, vectorB, tolerance, maxIterations);
+                    const { x, iterations, complexity, converged } = matrixType ==='symmetric' ? gaussSeidelSymmetric(matrix, vectorB, tolerance, maxIterations) : gaussSeidel(matrix, vectorB, tolerance, maxIterations);
 
                     // Fonction pour arrondir à 4 décimales
                     const roundTo4Decimals = (value) => Math.round(value * 10000) / 10000;
@@ -121,6 +124,24 @@ const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCa
                                     </span>
                                 </p>
                             </div>
+                        </div>
+                    );
+                    break;
+                }
+                case 'resolutin-inf' : {
+                    const {x} = solveLowerTriangularMatrix(matrix, vectorB);
+                    setCalculationDisplay(
+                        <div>
+                            <BlockMath math={`\\text{Solution finale (x): } \\begin{bmatrix} ${x.join(" \\\\ ")} \\end{bmatrix}`} />
+                        </div>
+                    );
+                    break;
+                }
+                case 'resolutin-sup':{
+                    const {x} = solveUpperTriangularMatrix(matrix, vectorB);
+                    setCalculationDisplay(
+                        <div>
+                            <BlockMath math={`\\text{Solution finale (x): } \\begin{bmatrix} ${x.join(" \\\\ ")} \\end{bmatrix}`} />
                         </div>
                     );
                     break;
