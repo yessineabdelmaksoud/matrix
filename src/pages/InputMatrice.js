@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Form, Row, Col } from 'react-bootstrap';
 
-function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrixChange, handleVectorChange, bandStrength_p, bandStrength_q }) {
+function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrixChange, handleVectorChange, bandStrength_p, bandStrength_q ,vectorB}) {
     
 
     return (
@@ -49,6 +49,7 @@ function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrix
                                         <Form.Control
                                             type="number"
                                             placeholder={`b[${i}]`}
+                                            value = {vectorB[i]}
                                             onChange={(e) => handleVectorChange(i, e.target.value)}
                                             className={
                                                 size > 8 ? 'small-input' :

@@ -275,6 +275,7 @@ const onFileChange = (event) => {
           bandStrength_q={bandStrength_q}
           handleMatrixChange={handleMatrixChange}
           handleVectorChange={handleVectorChange}
+          vectorB = {vectorB}
         />
 
         <Buttons
