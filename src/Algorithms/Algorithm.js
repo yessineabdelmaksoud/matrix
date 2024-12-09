@@ -154,7 +154,7 @@ export const gaussSeidel = (A, b, tolerance, maxIterations ) => {
   // Vérification des conditions de convergence
 
   if (!estRayonSpectralInferieurAUn(A)) {
-    throw new Error("Le rayon spectral de la matrice d'itération est supérieur à 1. La méthode de Gauss-Seidel pourrait ne pas converger.");
+    throw new Error("Error: The spectral radius of the iteration matrix is ​​greater than 1. The Gauss-Seidel method may not converge.");
   }
 
   let x = Array(n).fill(0); // Initialisation du vecteur solution avec des zéros.
@@ -197,7 +197,7 @@ export const gaussSeidelSymmetric = (A, b, tolerance, maxIterations ) => {
     // Vérification des conditions de convergence
   
     if (!estRayonSpectralInferieurAUn(A)) {
-      throw new Error("Le rayon spectral de la matrice d'itération est supérieur à 1. La méthode de Gauss-Seidel pourrait ne pas converger.");
+      throw new Error("Error: The spectral radius of the iteration matrix is ​​greater than 1. The Gauss-Seidel method may not converge.");
     }
   
     let x = Array(n).fill(0); // Initialisation du vecteur solution avec des zéros.
@@ -243,7 +243,7 @@ export function gaussSeidelBandMatrix(A, b, bandStrength_p, bandStrength_q, tole
     // Vérification des conditions de convergence
   
     if (!estRayonSpectralInferieurAUn(A)) {
-      throw new Error("Le rayon spectral de la matrice d'itération est supérieur à 1. La méthode de Gauss-Seidel pourrait ne pas converger.");
+      throw new Error("Error: The spectral radius of the iteration matrix is ​​greater than 1. The Gauss-Seidel method may not converge.");
     }
   
     let x = Array(n).fill(0); // Initialisation du vecteur solution avec des zéros.
@@ -286,7 +286,7 @@ export function gaussSeidelPositiveDefiniteMatrix(A, b, tolerance = 1e-10, maxIt
         throw new Error("La matrice A n'est pas definit positive.");
     }
     if (!estRayonSpectralInferieurAUn(A)) {
-      throw new Error("Le rayon spectral de la matrice d'itération est supérieur à 1. La méthode de Gauss-Seidel pourrait ne pas converger.");
+      throw new Error("Error: The spectral radius of the iteration matrix is ​​greater than 1. The Gauss-Seidel method may not converge.");
     }
   
     let x = Array(n).fill(0); // Initialisation du vecteur solution avec des zéros.
