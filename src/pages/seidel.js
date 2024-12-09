@@ -231,7 +231,7 @@ const onFileChange = (event) => {
             setBandStrength_q={setBandStrength_q}
             setBandStrength_p={setBandStrength_p}
             bandStrength_p={bandStrength_p}
-            bandStrength_q={bandStrength_p}
+            bandStrength_q={bandStrength_q}
             min={min}
             max={max}
             handleMaxChange={handleMaxChange}
