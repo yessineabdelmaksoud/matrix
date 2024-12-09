@@ -78,7 +78,7 @@ function Seidel() {
     if(event.target.value ==='band'){
       for(let i = 0; i < size; i++) {
         for(let j = 0; j < size; j++){
-            if((i-j > bandStrength_p) || (j - i >bandStrength_q)){
+            if((i-j > bandStrength_q) || (j - i >bandStrength_p)){
               handleMatrixChange(i, j, 0);
             }
         }
@@ -104,11 +104,31 @@ function Seidel() {
     setSize(newSize);
     setMatrix(Array(newSize).fill().map(() => Array(newSize).fill(0)));
     setVectorB(Array(newSize).fill(0));
+    
   };
 
   const handleMatrixChange = (i, j, value) => {
     const updatedMatrix = [...matrix];
     updatedMatrix[i][j] = value;
+    // console.log(matrixType);
+    if(matrixType === 'band'){
+      for(let i = 0; i < size; i++) {
+        for(let j = 0; j < size; j++){
+            if((i-j > bandStrength_q) || (j - i >bandStrength_p)){
+              updatedMatrix[i][j] = 0;
+            }
+        }
+      }
+    }
+    else if(matrixType === 'diagonally-dominant'){
+      for(let i = 0; i < size; i++) {
+        let rowSum = 0;
+        for(let j = 0; j < size; j++){
+          if(j != i) rowSum = rowSum + parseInt(matrix[i][j]);
+        }
+        updatedMatrix[i][i] = Math.max(matrix[i][i],rowSum);
+      }
+    }
     setMatrix(updatedMatrix); 
   };
 
@@ -135,7 +155,7 @@ const onFileChange = (event) => {
   handleFileUpload(event, size, setMatrix, setVectorB, algorithm);
 };
   
-  const calculate = Calculate({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay,renderMatrixDisplay, matrixType});
+  const calculate = Calculate({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay,renderMatrixDisplay, matrixType, bandStrength_p, bandStrength_q});
   const handleDownloadMatrix = () => {
     downloadMatrix(method, size, matrixType, 'gauss-seidel', setMatrix, setVectorB, min, max);
     console.log("Download Matrix clicked");

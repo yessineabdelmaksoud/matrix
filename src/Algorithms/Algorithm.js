@@ -237,115 +237,120 @@ export const gaussSeidelSymmetric = (A, b, tolerance, maxIterations ) => {
     throw new Error("La méthode de Gauss-Seidel n'a pas convergé dans le nombre maximal d'itérations.");
 };
 
-export function gaussSeidelBandMatrix(A, b, bandwidth, tolerance = 1e-10, maxIterations = 1000) {
-  const n = A.length; // Number of rows
-  let x = new Array(n).fill(0); // Initialize x with zeros
-  let xOld = new Array(n);
-  let iterations = 0;
-
-  // Loop until convergence or max iterations
-  while (iterations < maxIterations) {
-      xOld = [...x]; // Save the current values of x
-      for (let i = 0; i < n; i++) {
-          let sum = 0;
-          
-          // Only sum the elements within the bandwidth for the current row
-          for (let j = Math.max(0, i - bandwidth); j < i; j++) {
-              sum += A[i][j] * x[j]; // Lower part within the band
-          }
-          for (let j = i + 1; j <= Math.min(n - 1, i + bandwidth); j++) {
-              sum += A[i][j] * x[j]; // Upper part within the band
-          }
-          
-          // Update the value of x[i]
-          x[i] = (b[i] - sum) / A[i][i];
-      }
-
-      // Check for convergence (using maximum difference between the current and previous iteration)
-      let maxDiff = 0;
-      for (let i = 0; i < n; i++) {
-          maxDiff = Math.max(maxDiff, Math.abs(x[i] - xOld[i]));
-      }
-      if (maxDiff < tolerance) {
-          return { solution: x, iterations };
-      }
-      iterations++;
-  }
-
-  throw new Error("Gauss-Seidel did not converge within the maximum number of iterations");
+export function gaussSeidelBandMatrix(A, b, bandStrength_p, bandStrength_q, tolerance = 1e-10, maxIterations = 1000) {
+    const n = A.length;
+  
+    // Vérification des conditions de convergence
+  
+    if (!estRayonSpectralInferieurAUn(A)) {
+      throw new Error("Le rayon spectral de la matrice d'itération est supérieur à 1. La méthode de Gauss-Seidel pourrait ne pas converger.");
+    }
+  
+    let x = Array(n).fill(0); // Initialisation du vecteur solution avec des zéros.
+    let totalOperations = 0; // Compteur pour les opérations arithmétiques.
+    let iterations = []; // Tableau pour stocker les valeurs de x à chaque itération.
+  
+    for (let k = 0; k < maxIterations; k++) {
+        let maxDifference = 0; // Différence maximale pour vérifier la convergence.
+  
+        for (let i = 0; i < n; i++) {
+            let sum = b[i]; // Commencer avec le terme indépendant b[i].
+  
+            for (let j = Math.max(0, i-bandStrength_p); j < Math.min(n, bandStrength_q); j++) {
+                if (j !== i) { // Ajouter les contributions des autres termes sauf x[i].
+                    sum -= A[i][j] * x[j];
+                    totalOperations++; // Incrémenter le compteur d'opérations.
+                }
+            }
+  
+            const newX = sum / A[i][i]; // Calculer la nouvelle valeur pour x[i].
+            maxDifference = Math.max(maxDifference, Math.abs(newX - x[i])); // Mettre à jour la différence maximale.
+            x[i] = newX; // Mettre à jour x[i].
+            totalOperations++; // Incrémenter le compteur d'opérations.
+        }
+  
+        iterations.push([...x]); // Stocker la copie actuelle de x.
+  
+        if (maxDifference < tolerance) { // Si la convergence est atteinte, retourner la solution.
+            return { x, iterations, converged: true, complexity: totalOperations*2 };
+        }
+    }
+  
+    throw new Error("La méthode de Gauss-Seidel n'a pas convergé dans le nombre maximal d'itérations.");
 }
-
-export function gaussSeidelUpperHalfBand(A, b, bandwidth, tolerance = 1e-10, maxIterations = 1000) {
-  const n = A.length; // Number of rows
-  let x = new Array(n).fill(0); // Initialize x with zeros
-  let xOld = new Array(n);
-  let iterations = 0;
-
-  // Loop until convergence or max iterations
-  while (iterations < maxIterations) {
-      xOld = [...x]; // Save the current values of x
-      for (let i = 0; i < n; i++) {
-          let sum = 0;
-          
-          // Only sum the elements in the upper half (from the current row to the right)
-          for (let j = i + 1; j <= Math.min(i + bandwidth, n - 1); j++) {
-              sum += A[i][j] * x[j]; // Upper part within the band
-          }
-
-          // Update the value of x[i] using the sum and the diagonal element A[i][i]
-          x[i] = (b[i] - sum) / A[i][i];
-      }
-
-      // Check for convergence (using maximum difference between the current and previous iteration)
-      let maxDiff = 0;
-      for (let i = 0; i < n; i++) {
-          maxDiff = Math.max(maxDiff, Math.abs(x[i] - xOld[i]));
-      }
-      if (maxDiff < tolerance) {
-          return { solution: x, iterations };
-      }
-      iterations++;
-  }
-
-  throw new Error("Gauss-Seidel did not converge within the maximum number of iterations");
+export function gaussSeidelPositiveDefiniteMatrix(A, b, tolerance = 1e-10, maxIterations = 1000) {
+    const n = A.length;
+  
+    // Vérification des conditions de convergence
+    if(!isPositiveDefinite(A, n)){
+        throw new Error("La matrice A n'est pas definit positive.");
+    }
+    if (!estRayonSpectralInferieurAUn(A)) {
+      throw new Error("Le rayon spectral de la matrice d'itération est supérieur à 1. La méthode de Gauss-Seidel pourrait ne pas converger.");
+    }
+  
+    let x = Array(n).fill(0); // Initialisation du vecteur solution avec des zéros.
+    let totalOperations = 0; // Compteur pour les opérations arithmétiques.
+    let iterations = []; // Tableau pour stocker les valeurs de x à chaque itération.
+  
+    for (let k = 0; k < maxIterations; k++) {
+        let maxDifference = 0; // Différence maximale pour vérifier la convergence.
+  
+        for (let i = 0; i < n; i++) {
+            let sum = b[i]; // Commencer avec le terme indépendant b[i].
+  
+            for (let j = 0; j < n; j++) {
+                if (j !== i) { // Ajouter les contributions des autres termes sauf x[i].
+                    sum -= A[i][j] * x[j];
+                    totalOperations++; // Incrémenter le compteur d'opérations.
+                }
+            }
+  
+            const newX = sum / A[i][i]; // Calculer la nouvelle valeur pour x[i].
+            maxDifference = Math.max(maxDifference, Math.abs(newX - x[i])); // Mettre à jour la différence maximale.
+            x[i] = newX; // Mettre à jour x[i].
+            totalOperations++; // Incrémenter le compteur d'opérations.
+        }
+  
+        iterations.push([...x]); // Stocker la copie actuelle de x.
+  
+        if (maxDifference < tolerance) { // Si la convergence est atteinte, retourner la solution.
+            return { x, iterations, converged: true, complexity: totalOperations*2 };
+        }
+    }
+  
+    throw new Error("La méthode de Gauss-Seidel n'a pas convergé dans le nombre maximal d'itérations.");
 }
+function isPositiveDefinite(matrix, size) {
+    const n = size;
 
-export function gaussSeidelLowerHalfBand(A, b, bandwidth, tolerance = 1e-10, maxIterations = 1000) {
-  const n = A.length; // Number of rows
-  let x = new Array(n).fill(0); // Initialize x with zeros
-  let xOld = new Array(n);
-  let iterations = 0;
+    // Create an array for the Cholesky decomposition
+    let L = Array.from({ length: n }, () => Array(n).fill(0));
 
-  // Loop until convergence or max iterations
-  while (iterations < maxIterations) {
-      xOld = [...x]; // Save the current values of x
-      for (let i = 0; i < n; i++) {
-          let sum = 0;
-          
-          // Only sum the elements in the lower half (from the current row to the left)
-          for (let j = Math.max(0, i - bandwidth); j < i; j++) {
-              sum += A[i][j] * x[j]; // Lower part within the band
-          }
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j <= i; j++) {
+            let sum = 0;
 
-          // Update the value of x[i] using the sum and the diagonal element A[i][i]
-          x[i] = (b[i] - sum) / A[i][i];
-      }
+            for (let k = 0; k < j; k++) {
+                sum += L[i][k] * L[j][k];
+            }
 
-      // Check for convergence (using maximum difference between the current and previous iteration)
-      let maxDiff = 0;
-      for (let i = 0; i < n; i++) {
-          maxDiff = Math.max(maxDiff, Math.abs(x[i] - xOld[i]));
-      }
-      if (maxDiff < tolerance) {
-          return { solution: x, iterations };
-      }
-      iterations++;
-  }
+            if (i === j) {
+                // Diagonal elements
+                const diag = matrix[i][i] - sum;
+                if (diag <= 0) {
+                    return false; // Not positive definite
+                }
+                L[i][j] = Math.sqrt(diag);
+            } else {
+                // Off-diagonal elements
+                L[i][j] = (matrix[i][j] - sum) / L[j][j];
+            }
+        }
+    }
 
-  throw new Error("Gauss-Seidel did not converge within the maximum number of iterations");
+    return true; // Matrix is positive definite
 }
-
-
 export function solveLowerTriangularMatrix(A, b) {
     const n = b.length;
     const x = new Array(n).fill(0);

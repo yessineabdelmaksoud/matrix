@@ -11,11 +11,13 @@ import {
     estDiagonaleDominante,
     solveLowerTriangularMatrix,
     solveUpperTriangularMatrix,
-    gaussSeidelSymmetric
+    gaussSeidelSymmetric,
+    gaussSeidelBandMatrix,
+    gaussSeidelPositiveDefiniteMatrix
 } from '../Algorithms/Algorithm'; // Assurez-vous que le chemin est correct
 
 
-const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay, renderMatrixDisplay, matrixType}) => {
+const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay, renderMatrixDisplay, matrixType, bandStrength_p, bandStrength_q}) => {
     const calculate = () => {
         try {
             let result;
@@ -50,7 +52,7 @@ const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCa
                     );
                     break;
                 case 'gauss-seidel': {
-                    const { x, iterations, complexity, converged } = matrixType ==='symmetric' ? gaussSeidelSymmetric(matrix, vectorB, tolerance, maxIterations) : gaussSeidel(matrix, vectorB, tolerance, maxIterations);
+                    const { x, iterations, complexity, converged } = matrixType ==='symmetric' ? gaussSeidelSymmetric(matrix, vectorB, tolerance, maxIterations) : matrixType === 'band' ? gaussSeidelBandMatrix(matrix, vectorB, bandStrength_p, bandStrength_q, tolerance, maxIterations) : matrixType ==='positive-definite' ? gaussSeidelPositiveDefiniteMatrix(matrix, vectorB, tolerance, maxIterations) : gaussSeidel(matrix, vectorB, tolerance, maxIterations);
 
                     // Fonction pour arrondir à 4 décimales
                     const roundTo4Decimals = (value) => Math.round(value * 10000) / 10000;

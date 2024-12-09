@@ -18,7 +18,8 @@ function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrix
                                             <Form.Control
                                                 type="number"
                                                 placeholder={`[${i}][${j}]`}
-                                                value={matrixType === 'symmetric' && i < j && matrix[i][j] ? matrix[j][i] : algorithm ==='resolutin-inf' && i < j ? 0 : algorithm === 'resolutin-sup' && i > j ? 0 : matrixType === 'band' && (i-j > bandStrength_p || j - i > bandStrength_q) ? 0 :null}
+                                                // {...console.log(bandStrength_q)}
+                                                value={matrixType === 'symmetric' && i < j && matrix[i][j] ? matrix[j][i] : algorithm ==='resolutin-inf' && i < j ? 0 : algorithm === 'resolutin-sup' && i > j ? 0 : matrixType === 'band' && (i-j > bandStrength_q || j - i > bandStrength_p) ? 0 : matrix[i][j]}
                                                 onChange={(e) => {
                                                     handleMatrixChange(i, j, e.target.value);
                                                     if (matrixType === 'symmetric' && i !== j) {
