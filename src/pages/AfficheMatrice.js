@@ -12,14 +12,14 @@ const AfficheMatrice = ({ matrix, vectorB, algorithm }) => {
                     ${matrix.map(row => row.join(' & ')).join(' \\\\ ')}
                 \\end{bmatrix}`}
             </BlockMath>
-                <>
+                {algorithm !=='transpose' && algorithm !== 'determinant' && algorithm != 'inverse' && (<>
                     <h5>Vector (b):</h5>
                     <BlockMath>
                         {`\\begin{bmatrix}
                             ${vectorB.join(' \\\\ ')}
                         \\end{bmatrix}`}
                     </BlockMath>
-                </>
+                </>)}
         </div>
     );
 

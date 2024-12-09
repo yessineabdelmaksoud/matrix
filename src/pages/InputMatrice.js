@@ -41,7 +41,7 @@ function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrix
                         </div>
                     </Form.Group>
 
-                        <Form.Group className="mb-3">
+                        {algorithm !== 'transpose' && algorithm !== 'determinant' && algorithm != 'inverse' && (<Form.Group className="mb-3">
                             <h5 className="text-center">Enter Vector (b)</h5>
                             <Row className="justify-content-center">
                                 {[...Array(size)].map((_, i) => (
@@ -59,7 +59,7 @@ function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrix
                                     </Col>
                                 ))}
                             </Row>
-                        </Form.Group>
+                        </Form.Group>) }
                 </Card>
             )}
         </>

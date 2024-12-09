@@ -19,13 +19,16 @@ import {
 
 const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCalculationDisplay, renderMatrixDisplay, matrixType, bandStrength_p, bandStrength_q}) => {
     const calculate = () => {
+        console.log(algorithm);
         try {
             let result;
 
             switch (algorithm) {
                 case 'transpose':
                     result = transpose(matrix);
-                    setCalculationDisplay(renderMatrixDisplay(result, null));
+                    setCalculationDisplay(<div>
+                        <BlockMath math={`\\text{Solution finale (x): } \\begin{bmatrix} ${result.join(" \\\\ ")} \\end{bmatrix}`} />
+                     </div>);
                     break;
                 case 'determinant':
                     result = determinant(matrix);
@@ -33,7 +36,10 @@ const Calculate = ({ algorithm, matrix, vectorB, tolerance, maxIterations, setCa
                     break;
                 case 'inverse':
                     result = inverseMatrix(matrix);
-                    setCalculationDisplay(renderMatrixDisplay(result, null));
+                    // console.log(result);
+                    setCalculationDisplay(<div>
+                             <BlockMath math={`\\text{Solution finale (x): } \\begin{bmatrix} ${result.join(" \\\\ ")} \\end{bmatrix}`} />
+                          </div>);
                     break;
                 case 'positive-definite':
                     result = estDefiniePositive(matrix);

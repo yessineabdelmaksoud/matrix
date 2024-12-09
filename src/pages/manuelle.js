@@ -23,8 +23,8 @@ function Seidelmanual({size,handleSizeChange,matrixType,handleMatrixTypeChange,a
               <option value="transpose">Transpose</option>
               <option value="determinant">Determinant</option>
               <option value="inverse">Inverse</option>
-              <option value="positive-definite">verify Positive Definite</option>
-              <option value="estDiagonaleDominante">verify Diagonale Dominante</option>
+              {/* <option value="positive-definite">verify Positive Definite</option> */}
+              {/* <option value="estDiagonaleDominante">verify Diagonale Dominante</option> */}
               <option value="resolutin-inf">resolution lower tringular matrix</option>
               <option value="resolutin-sup">resolution upper triangular matrix</option>
               <option value="gauss-seidel">solving linear systems with seidole gauss algorithm</option>
