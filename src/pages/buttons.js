@@ -24,7 +24,7 @@ const handleShowMatrixClick = () => {
 
 return (
     <div className="text-center mt-4">
-        {method === 'random' && size > 30 ? (
+        {method === 'random' && size > 21 ? (
             <Button className="btn-download mx-2" onClick={handleDownloadMatrix}>
                 Download Matrix
             </Button>

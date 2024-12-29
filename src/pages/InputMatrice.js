@@ -28,8 +28,8 @@ function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrix
                                                 }}
                                                 disabled={((matrixType === 'symmetric' || algorithm === 'resolutin-inf') && i < j) || (algorithm === 'resolutin-sup' && i > j ) || (matrixType === 'band' && ((i - j) > bandStrength_q || (j - i) > bandStrength_p))} // Disable lower triangle
                                                 className={
-                                                    size > 8 ? 'small-input' :
-                                                    size >= 6 && size <= 8 ? 'moyenne-input' :
+                                                    size > 7 ? 'small-input' :
+                                                    size >= 4 && size <= 7 ? 'moyenne-input' :
                                                     'normal-input'
                                                 }
                                             />
@@ -52,8 +52,8 @@ function InputMatrice({ method, size, matrixType,matrix, algorithm, handleMatrix
                                             value = {vectorB[i]}
                                             onChange={(e) => handleVectorChange(i, e.target.value)}
                                             className={
-                                                size > 8 ? 'small-input' :
-                                                size >= 6 && size <= 8 ? 'moyenne-input' :
+                                                size > 7 ? 'small-input' :
+                                                size >= 4 && size <= 7 ? 'moyenne-input' :
                                                 'normal-input'
                                             }
                                         />

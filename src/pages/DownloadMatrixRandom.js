@@ -2,7 +2,7 @@
 import { generateMatrixByType } from '../Algorithms/typematrice'; // Assurez-vous que le chemin est correct
 
 const downloadMatrix = (method, size, matrixType, algorithm, setMatrix, setVectorB, min, max) => {
-    if (method === 'random' && size > 30) {
+    if (method === 'random' && size > 21) {
         const { matrix: generatedMatrix, vectorB: generatedVectorB } = generateMatrixByType(size, matrixType, min, max, algorithm);
         setMatrix(generatedMatrix); // Met à jour la matrice générée
         setVectorB(generatedVectorB); // Met à jour le vecteur généré

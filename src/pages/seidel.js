@@ -98,8 +98,8 @@ function Seidel() {
     let newSize = parseInt(event.target.value, 10);
     if (isNaN(newSize) || newSize < 1) {
       newSize = 1;
-    } else if (newSize > 10 && method === 'manual') {
-      newSize = 10;
+    } else if (newSize > 8 && method === 'manual') {
+      newSize = 8;
     }
     setSize(newSize);
     setMatrix(Array(newSize).fill().map(() => Array(newSize).fill(0)));
