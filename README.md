@@ -73,7 +73,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 https://matrix-nu-six.vercel.app/gauss-seidel
 
 ### video
-[Regarder la vidéo](https://github.com/yessineabdelmaksoud/matrix/blob/main/Design%20sans%20titre.mp4)
+[![Nom de la vidéo](https://img.youtube.com/vi/DtKFFJOISQA/0.jpg)](https://www.youtube.com/watch?v=DtKFFJOISQA)
+
 
 
 
