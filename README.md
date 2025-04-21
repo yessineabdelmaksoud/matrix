@@ -69,5 +69,11 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
-[Regarder la vidéo sur Google Drive]([https://lien-de-telechargement.com](https://drive.google.com/file/d/1L3btxKX-Fl2uUgg9_UhNAXidklB_atzE/view))
+### lien site heberger
+https://matrix-nu-six.vercel.app/gauss-seidel
+
+### video
+[Regarder la vidéo](https://github.com/yessineabdelmaksoud/matrix/blob/main/Design%20sans%20titre.mp4)
+
+
 
